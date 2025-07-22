@@ -6,9 +6,9 @@ class Game:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
+        pygame.display.set_caption("Garden")
         self.clock = pygame.time.Clock()
         self.level = Level()
-        pygame.display.set_caption("Garden")
 
     def run(self):
         while True:
