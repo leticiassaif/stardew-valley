@@ -1,11 +1,13 @@
 import pygame, sys
 from settings import *
+from level import Level
 
 class Game:
-    def __innit__(self):
+    def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
+        self.level = Level()
         pygame.display.set_caption("Garden")
 
     def run(self):
@@ -16,6 +18,7 @@ class Game:
                     sys.exit()
             
             dt = self.clock.tick() / 1000
+            self.level.run(dt)
             pygame.display.update() 
 
 if __name__ == "__main__":
