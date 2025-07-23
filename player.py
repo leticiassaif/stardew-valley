@@ -6,7 +6,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, pos, group):
         super().__init__(group)
     
-        self.import_assets
+        self.import_assets()
 
         # general setup
         self.image = pygame.Surface((32,64)) #w, h
