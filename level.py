@@ -1,7 +1,7 @@
 import pygame
 from settings import *
 from player import Player
-
+#comentário de teste (tirar dps)
 class Level:
     def __init__(self):
         # get the display surface
