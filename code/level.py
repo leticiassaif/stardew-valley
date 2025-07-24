@@ -3,6 +3,7 @@ from settings import *
 from player import Player
 from overlay import Overlay
 from sprites import Generic
+# from pytmx.util_pygame import load_pygame
 
 class Level:
     def __init__(self):
@@ -16,6 +17,11 @@ class Level:
         self.overlay = Overlay(self.player)
 
     def setup(self):
+        # tmx_data = load_pygame("./data/map.tmx")
+
+        # # house
+        # tmx_data.get_layer_by_name
+
         self.player = Player((640,360), self.all_sprites) #pos, group
 
         Generic(
