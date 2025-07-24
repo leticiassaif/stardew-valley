@@ -61,7 +61,7 @@ class Player(pygame.sprite.Sprite):
     def get_status(self):
         # idle status
         if self.direction.magnitude() == 0:
-            self.status = self.status.split("_")[0] + "_idle"
+            self.status = self.status.split("_")[0]+"_idle"
 
     def move(self, dt):
         # normalizing a vector, so it doesn't move faster if going in 2 directions combined
