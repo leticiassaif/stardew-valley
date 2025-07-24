@@ -86,6 +86,10 @@ class Player(pygame.sprite.Sprite):
         if self.timers["tool use"].active:
             self.status = self.status.split("_")[0]+"_"+self.selected_tool
 
+    def update_timers(self):
+        for timer in self.timers.values():
+            timer.update()
+
     def move(self, dt):
         # normalizing a vector, so it doesn't move faster if going in 2 directions combined
         if self.direction.magnitude() > 0:
@@ -102,5 +106,6 @@ class Player(pygame.sprite.Sprite):
     def update(self, dt):
         self.input()
         self.get_status()
+        self.update_timers()
         self.move(dt)
         self.animate(dt)
