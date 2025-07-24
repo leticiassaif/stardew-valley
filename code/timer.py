@@ -7,7 +7,7 @@ class Timer:
         self.start_time = 0
         self.active = False
 
-    def active(self):
+    def activate(self):
         self.active = True
         self.start_time = pygame.time.get_ticks()
 
