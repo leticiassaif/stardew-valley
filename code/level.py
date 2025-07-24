@@ -37,7 +37,7 @@ class CameraGroup(pygame.sprite.Group):
         self.display_surface = pygame.display.get_surface()
 
     def custom_draw(self):
-        for layer in layers.values:
+        for layer in layers.values():
             for sprite in self.sprites():
                 if sprite.z == layer:
                     self.display_surface.blit(sprite.image, sprite.rect)
