@@ -76,6 +76,7 @@ class Player(pygame.sprite.Sprite):
             if keys[pygame.K_SPACE]:
                 self.timers["tool use"].activate()
                 self.direction = pygame.math.Vector2()
+                self.frame_index = 0
 
     def get_status(self):
         # idle status
