@@ -20,9 +20,17 @@ class Level:
         tmx_data = load_pygame("./data/map.tmx")
 
         # house
-        for layer in ["HouseFloor", "HouseFurnitureBottom", ]:
+        for layer in ["HouseFloor", "HouseFurnitureBottom"]:
             for x,y,surf in tmx_data.get_layer_by_name(layer).tiles():
-                Generic((x* TILE_SIZE, y* TILE_SIZE), surf, self.all_sprites, layers["house bottom"])
+                Generic((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites, layers["house bottom"])
+
+        for layer in ["HouseWalls", "HouseFurnitureTop"]:
+            for x,y,surf in tmx_data.get_layer_by_name(layer).tiles():
+                Generic((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites) # layer -> main (default) if not specified
+
+        # fence
+        for x,y,surf in tmx_data.get_layer_by_name("Fence").tiles():
+            Generic((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
 
         self.player = Player((640,360), self.all_sprites) #pos, group
 
