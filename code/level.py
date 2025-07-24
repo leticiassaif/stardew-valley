@@ -17,7 +17,7 @@ class Level:
 
     def setup(self):
         self.player = Player((640,360), self.all_sprites) #pos, group
-        
+
         Generic(
             pos = (0,0),
             surf = pygame.image.load("./graphics/world/ground.png").convert_alpha(), 
@@ -37,7 +37,7 @@ class CameraGroup(pygame.sprite.Group):
         self.display_surface = pygame.display.get_surface()
 
     def custom_draw(self):
-        for layer_pos in layers.values:
+        for layer in layers.values:
             for sprite in self.sprites():
-                if sprite.z == layer_pos:
+                if sprite.z == layer:
                     self.display_surface.blit(sprite.image, sprite.rect)
