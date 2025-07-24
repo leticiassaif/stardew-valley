@@ -78,5 +78,6 @@ class Player(pygame.sprite.Sprite):
 
     def update(self, dt):
         self.input()
+        self.get_status()
         self.move(dt)
         self.animate(dt)
