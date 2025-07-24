@@ -16,11 +16,13 @@ class Level:
         self.overlay = Overlay(self.player)
 
     def setup(self):
+        self.player = Player((640,360), self.all_sprites) #pos, group
+        
         Generic(
             pos = (0,0),
             surf = pygame.image.load("./graphics/world/ground.png").convert_alpha(), 
-            groups = self.all_sprites)
-        self.player = Player((640,360), self.all_sprites) #pos, group
+            groups = self.all_sprites,
+            z = layers["ground"])
 
     def run(self, dt):
         self.display_surface.fill("black")
@@ -35,5 +37,7 @@ class CameraGroup(pygame.sprite.Group):
         self.display_surface = pygame.display.get_surface()
 
     def custom_draw(self):
-        for sprite in self.sprites():
-            self.display_surface.blit(sprite.image, sprite.rect)
+        for layer_pos in layers.values:
+            for sprite in self.sprites():
+                if sprite.z == layer_pos:
+                    self.display_surface.blit(sprite.image, sprite.rect)
