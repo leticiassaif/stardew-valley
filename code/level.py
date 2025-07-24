@@ -72,7 +72,7 @@ class CameraGroup(pygame.sprite.Group):
         self.offset.y = player.rect.centery - SCREEN_HEIGHT / 2
 
         for layer_pos in layers.values():
-            for sprite in self.sprites():
+            for sprite in sorted(self.sprites(), key = lambda sprite: sprite.rect.centery):
                 if sprite.z == layer_pos:
                     offset_rect = sprite.rect.copy()
                     offset_rect.center -= self.offset
