@@ -19,7 +19,6 @@ class Level:
 
     def run(self, dt):
         self.display_surface.fill("black")
-        # self.all_sprites.draw(self.display_surface)
         self.all_sprites.custom_draw()
         self.all_sprites.update(dt)
 
