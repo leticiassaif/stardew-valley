@@ -19,3 +19,12 @@ class Water(Generic):
                          surf = self.frames[self.frame_index],
                          groups = groups, 
                          z = layers["water"])
+        
+    def animate(self, dt):
+        self.frame_index += 5 * dt
+        if self.frame_index >= len(self.frames):
+            self.frame_index = 0
+        self.image = self.frames[int(self.frame_index)]
+
+    def update(self,dt):
+        self.animate(dt)
