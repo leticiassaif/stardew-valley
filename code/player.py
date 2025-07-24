@@ -23,7 +23,8 @@ class Player(pygame.sprite.Sprite):
         self.speed = 200
 
         #Collision
-        self.collision_sprites 
+        self.hitbox = self.rect.copy().inflate(-126,-70)
+        self.collision_sprites  = collision_sprites
 
         # timers
         self.timers = {
@@ -130,6 +131,27 @@ class Player(pygame.sprite.Sprite):
         for timer in self.timers.values():
             timer.update()
 
+    def collision(self, direction):
+        for sprite in self.collision_sprites.sprites():
+            if hasattr(sprite, 'hitbox'): #é só para confirma
+                if sprite.hitbox.colliderect(self.hitbox):
+                    #Colisão em x
+                    if direction == "horizontal": 
+                        if self.direction.x > 0: #direita
+                            self.hitbox.right = sprite.hitbox.left
+                        if self.direction.x < 0: #esquerda
+                            self.hitbox.left = sprite.hitbox.right
+                        self.rect.centerx = self.hitbox.centerx
+                        self.pos.x = self.hitbox.centerx
+                    #Colisão em y
+                    if direction == "vertical":
+                        if self.direction.y > 0: #baixo
+                            self.hitbox.bottom = sprite.hitbox.top
+                        if self.direction.y < 0: #cima
+                            self.hitbox.top = sprite.hitbox.bottom
+                        self.rect.centery = self.hitbox.centery
+                        self.pos.y = self.hitbox.centery
+        
     def move(self, dt):
         # normalizing a vector, so it doesn't move faster if going in 2 directions combined
         if self.direction.magnitude() > 0:
@@ -139,11 +161,13 @@ class Player(pygame.sprite.Sprite):
         self.pos.x += self.direction.x * self.speed * dt
         self.hitbox.centerx = round(self.pos.x) 
         self.rect.centerx = self.hitbox.centerx
+        self.collision("horizontal")
         
         # vertical movement
         self.pos.y += self.direction.y * self.speed * dt
         self.hitbox.centery = round(self.pos.y)
         self.rect.centery = self.hitbox.centery
+        self.collision("vertical")
 
     def update(self, dt):
         self.input()

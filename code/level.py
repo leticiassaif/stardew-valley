@@ -47,7 +47,10 @@ class Level:
         for obj in tmx_data.get_layer_by_name("Decoration"):
             WildFlower((obj.x, obj.y), obj.image, [self.all_sprites, self.collision_sprites])
 
-        self.player = Player((640,360), self.all_sprites, self.collision_sprites) #pos, group
+        #Player
+        for obj in tmx_data.get_layer_by_name("Player"):
+            if obj.name == "Start":
+                self.player = Player((obj.x,obj.y), self.all_sprites, self.collision_sprites) #pos, group
 
         Generic(
             pos = (0,0),

@@ -33,7 +33,7 @@ class Water(Generic): #Não precisa de Hitbox
 class WildFlower(Generic):
     def __init__(self, pos, surf, groups):
         super().__init__(pos, surf, groups)
-        self.hitbox = self.rect.copy().inlfate(-20,-self.rect.height*0.9)
+        self.hitbox = self.rect.copy().inflate(-20,-self.rect.height*0.9)
 
 class Tree(Generic):
     def __init__(self, pos, surf, groups, name):
