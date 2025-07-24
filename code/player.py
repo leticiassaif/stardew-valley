@@ -1,7 +1,7 @@
 import pygame
 from settings import *
 from support import *
-from timer import Timer
+from timer import Timer # type: ignore
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, group):
@@ -52,28 +52,30 @@ class Player(pygame.sprite.Sprite):
     def input(self):
         keys = pygame.key.get_pressed()
 
-        # directions
-        if keys[pygame.K_UP]:
-            self.direction.y = -1
-            self.status = "up"
-        elif keys[pygame.K_DOWN]:
-            self.direction.y = 1
-            self.status = "down"
-        else:
-            self.direction.y = 0
+        if not self.timers["tool use"].active:
+            # directions
+            if keys[pygame.K_UP]:
+                self.direction.y = -1
+                self.status = "up"
+            elif keys[pygame.K_DOWN]:
+                self.direction.y = 1
+                self.status = "down"
+            else:
+                self.direction.y = 0
 
-        if keys[pygame.K_RIGHT]:
-            self.direction.x = 1
-            self.status = "right"
-        elif keys[pygame.K_LEFT]:
-            self.direction.x = -1
-            self.status = "left"
-        else:
-            self.direction.x = 0
+            if keys[pygame.K_RIGHT]:
+                self.direction.x = 1
+                self.status = "right"
+            elif keys[pygame.K_LEFT]:
+                self.direction.x = -1
+                self.status = "left"
+            else:
+                self.direction.x = 0
 
-        # tool use
-        if keys[pygame.K_SPACE]:
-            self.timers["tool use"].activate()
+            # tool use
+            if keys[pygame.K_SPACE]:
+                self.timers["tool use"].activate()
+                self.direction = pygame.math.Vector2()
 
     def get_status(self):
         # idle status
@@ -82,7 +84,7 @@ class Player(pygame.sprite.Sprite):
 
         # tool use
         if self.timers["tool use"].active:
-            print("tool is being used")
+            self.status = self.status.split("_")[0]+"_"+self.selected_tool
 
     def move(self, dt):
         # normalizing a vector, so it doesn't move faster if going in 2 directions combined
