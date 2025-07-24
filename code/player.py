@@ -7,7 +7,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__(group)
     
         self.import_assets()
-        self.status = "down"
+        self.status = "down_idle"
         self.frame_index = 0
 
         # general setup
