@@ -9,7 +9,7 @@ class Level:
         self.display_surface = pygame.display.get_surface()
 
         # sprite groups
-        self.all_sprites = pygame.sprite.Group() # draw & update all sprites in game
+        self.all_sprites = CameraGroup() # draw & update all sprites in game
 
         self.setup()
         self.overlay = Overlay(self.player)
@@ -23,3 +23,7 @@ class Level:
         self.all_sprites.update(dt)
 
         self.overlay.display()
+
+class CameraGroup(pygame.sprite.Group):
+    def __init__(self):
+        super().__init__()
