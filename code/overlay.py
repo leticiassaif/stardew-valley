@@ -17,6 +17,7 @@ class Overlay:
 
         # tools
         tool_surf = self.tools_surf[self.player.selected_tool]
-        self.display_surface.blit(tool_surf,(0,0)) #x, y
+        tool_rect = tool_surf.get_rect(midbottom = overlay_pos["tool"])
+        self.display_surface.blit(tool_surf,tool_rect) #x, y
 
         # seeds
