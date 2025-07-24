@@ -1,5 +1,6 @@
 import pygame
 from settings import *
+from random import randint
 
 class Generic(pygame.sprite.Sprite):
     def __init__(self, pos, surf, groups, z = layers["main"]):
@@ -39,6 +40,21 @@ class Tree(Generic):
     def __init__(self, pos, surf, groups, name):
         super().__init__(pos, surf, groups)
 
+        
+
         # #apples
-        # self.apples_surf =  pygame.image.load("./graphics/fruit/apple.png")
-        # self.apple_pos =apple_pos[name]
+        self.apples_surf =  pygame.image.load("./graphics/fruit/apple.png")
+        self.apple_pos = apple_pos[name]
+        self.apple_sprites = pygame.sprite.Group()
+        self.create_fruit()
+    
+    def create_fruit(self):
+        for pos in self.apple_pos:
+            if randint(0,10) < 2:
+                x = pos[0] + self.rect.left
+                y = pos[1] + self.rect.top
+                Generic(
+                    pos = (x,y), 
+                    surf = self.apples_surf,
+                    groups = [self.apple_sprites,self.groups()[0]],#Tá chamando [self.all_sprites, self.collision_sprites]
+                    z = layers["fruit"])
