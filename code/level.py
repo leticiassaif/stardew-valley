@@ -41,8 +41,8 @@ class Level:
         # tree
 
         # wildflowers
-        for obj in tmx_data.get_layer_by_name("Decoration").tiles():
-            WildFlower((obj.x, obj.y), obj.image, self.all_sprites)
+        for x,y,surf in tmx_data.get_layer_by_name("Decoration").tiles():
+            WildFlower((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites)
 
         self.player = Player((640,360), self.all_sprites) #pos, group
 
