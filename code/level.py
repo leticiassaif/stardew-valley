@@ -2,6 +2,7 @@ import pygame
 from settings import *
 from player import Player
 from overlay import Overlay
+from sprites import Generic
 
 class Level:
     def __init__(self):
@@ -15,6 +16,10 @@ class Level:
         self.overlay = Overlay(self.player)
 
     def setup(self):
+        Generic(
+            pos = (0,0),
+            surf = pygame.image.load("./graphics/world/ground.png").convert_alpha(), 
+            groups = self.all_sprites)
         self.player = Player((640,360), self.all_sprites) #pos, group
 
     def run(self, dt):
