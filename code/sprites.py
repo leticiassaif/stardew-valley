@@ -7,8 +7,9 @@ class Generic(pygame.sprite.Sprite):
         self.image = surf
         self.rect = self.image.get_rect(topleft = pos)
         self.z = z
+        self.hitbox = self.rect.copy().inflate(-self.rect.width*0.2,-self.rect.height*0.75) # w < h
 
-class Water(Generic):
+class Water(Generic): #Não precisa de Hitbox
     def __init__(self, pos, frames, groups):
         # animation setup
         self.frames = frames
@@ -32,7 +33,12 @@ class Water(Generic):
 class WildFlower(Generic):
     def __init__(self, pos, surf, groups):
         super().__init__(pos, surf, groups)
+        self.hitbox = self.rect.copy().inlfate(-20,-self.rect.height*0.9)
 
 class Tree(Generic):
     def __init__(self, pos, surf, groups, name):
         super().__init__(pos, surf, groups)
+
+        # #apples
+        # self.apples_surf =  pygame.image.load("./graphics/fruit/apple.png")
+        # self.apple_pos =apple_pos[name]
