@@ -20,12 +20,13 @@ class Player(pygame.sprite.Sprite):
     
     def import_assets(self):
         self.animations = {"up": [],"down": [],"left": [],"right": [],
-						   "right_idle":[],"left_idle":[],"up_idle":[],"down_idle":[],
-						   "right_hoe":[],"left_hoe":[],"up_hoe":[],"down_hoe":[],
-						   "right_axe":[],"left_axe":[],"up_axe":[],"down_axe":[],
-						   "right_water":[],"left_water":[],"up_water":[],"down_water":[]}
+						   "right_idle": [],"left_idle": [],"up_idle": [],"down_idle": [],
+						   "right_hoe": [],"left_hoe": [],"up_hoe": [],"down_hoe": [],
+						   "right_axe": [],"left_axe": [],"up_axe":[],"down_axe": [],
+						   "right_water": [],"left_water": [],"up_water": [],"down_water": []}
+        
         for animation in self.animations.keys():
-            full_path = "../sprites/character/" + animation
+            full_path = "../graphics/character/" + animation
             self.animations[animation] = import_folder(full_path) 
 
     def input(self):
