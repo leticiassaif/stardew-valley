@@ -21,10 +21,16 @@ class Player(pygame.sprite.Sprite):
         self.speed = 200
 
         # timers
+        self.timers = {
+            "tool use": Timer(350, self.use_tool)
+        }
 
         # tools
         self.selected_tool = "axe"
     
+    def use_tool(self):
+        print(self.selected_tool)
+
     def import_assets(self):
         self.animations = {"up": [],"down": [],"left": [],"right": [],
 						   "right_idle": [],"left_idle": [],"up_idle": [],"down_idle": [],
@@ -67,7 +73,7 @@ class Player(pygame.sprite.Sprite):
 
         # tool use
         if keys[pygame.K_SPACE]:
-            # timer for the tool use
+            self.timers["tool use"].activate()
 
     def get_status(self):
         # idle status
@@ -75,6 +81,8 @@ class Player(pygame.sprite.Sprite):
             self.status = self.status.split("_")[0]+"_idle"
 
         # tool use
+        if self.timers["tool use"].active:
+            print("tool is being used")
 
     def move(self, dt):
         # normalizing a vector, so it doesn't move faster if going in 2 directions combined
