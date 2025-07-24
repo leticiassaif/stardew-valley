@@ -2,7 +2,7 @@ import pygame
 from settings import *
 from player import Player
 from overlay import Overlay
-from sprites import Generic, Water
+from sprites import Generic, Water, WildFlower
 from pytmx.util_pygame import load_pygame
 from support import *
 
@@ -41,7 +41,8 @@ class Level:
         # tree
 
         # wildflowers
-
+        for obj in tmx_data.get_layer_by_name("Decoration").tiles():
+            WildFlower((obj.x, obj.y), obj.image, self.all_sprites)
 
         self.player = Player((640,360), self.all_sprites) #pos, group
 
