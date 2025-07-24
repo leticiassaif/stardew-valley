@@ -37,23 +37,31 @@ class Player(pygame.sprite.Sprite):
             
         self.image = self.animations[self.status][int(self.frame_index)]
 
-
-
     def input(self):
         keys = pygame.key.get_pressed()
+
         if keys[pygame.K_UP]:
             self.direction.y = -1
+            self.status = "up"
         elif keys[pygame.K_DOWN]:
             self.direction.y = 1
+            self.status = "down"
         else:
             self.direction.y = 0
 
         if keys[pygame.K_RIGHT]:
             self.direction.x = 1
+            self.status = "right"
         elif keys[pygame.K_LEFT]:
             self.direction.x = -1
+            self.status = "left"
         else:
             self.direction.x = 0
+
+    def get_status(self):
+        # idle status
+        if self.direction.magnitude() == 0:
+            self.status = self.status.split("_")[0] + "_idle"
 
     def move(self, dt):
         # normalizing a vector, so it doesn't move faster if going in 2 directions combined
