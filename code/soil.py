@@ -19,4 +19,6 @@ class SoilLayer:
     def create_soil_grid(self):
         ground = pygame.image.load("./graphics/world/ground.png")
         h_tiles, v_tiles = ground.get_width() // TILE_SIZE, ground.get_height() // TILE_SIZE
-        print(h_tiles, v_tiles)
+        
+        self.grid = [ [[] for col in range(h_tiles)] for row in range(v_tiles) ]
+        print(self.grid)
