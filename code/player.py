@@ -156,6 +156,7 @@ class Player(pygame.sprite.Sprite):
                     else:
                         self.status = "left_idle"
                         self.sleep = True
+
     def get_status(self):
         # idle status
         if self.direction.magnitude() == 0:
