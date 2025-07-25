@@ -6,6 +6,7 @@ from sprites import Generic, Water, WildFlower, Tree, Interaction
 from pytmx.util_pygame import load_pygame
 from support import *
 from transition import Transition
+from soil import SoilLayer
 
 
 class Level:
@@ -22,6 +23,7 @@ class Level:
         self.setup()
         self.overlay = Overlay(self.player)
         self.transition = Transition(self.reset, self.player)
+        self.soil_layer = SoilLayer(self.all_sprites)
 
     def setup(self):
         tmx_data = load_pygame("./data/map.tmx")
