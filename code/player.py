@@ -22,7 +22,7 @@ class Player(pygame.sprite.Sprite):
         self.pos = pygame.math.Vector2(self.rect.center)
         self.speed = 250
 
-        #Collision
+        # Collision
         self.hitbox = self.rect.copy().inflate(-126,-70)
         self.collision_sprites  = collision_sprites
 
@@ -44,12 +44,12 @@ class Player(pygame.sprite.Sprite):
         self.seed_index = 0
         self.selected_seed = self.seeds[self.seed_index]
 
-        self.item_inventory = {
-            "wood" :   0,
-            "apple" :  0,
-            "corn" :   0,
-            "tomato" : 0
-        }
+        # self.item_inventory = {
+        #     "wood" :   0,
+        #     "apple" :  0,
+        #     "corn" :   0,
+        #     "tomato" : 0
+        # } CECIIII eu vi que tu adicionou outro, precisa de dois???
 
         #Inventory
         self.item_inventory = {

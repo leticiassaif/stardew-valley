@@ -71,7 +71,7 @@ class Tree(Generic):
         self.stump_surf = pygame.image.load(stump_path).convert_alpha()
         self.invul_timer = Timer(200)
 
-        # #apples
+        # apples
         self.apples_surf =  pygame.image.load("./graphics/fruit/apple.png")
         self.apple_pos = apple_pos[name]
         self.apple_sprites = pygame.sprite.Group()
@@ -80,10 +80,10 @@ class Tree(Generic):
         self.player_add = player_add
     
     def damage(self):
-        #dando dano na tree
+        # dando dano na tree
         self.health -= 1
 
-        #remove an apple
+        # remove an apple
         if len(self.apple_sprites) > 0:
             random_apple = choice(self.apple_sprites.sprites())
             Particle(pos = random_apple.rect.topleft,
