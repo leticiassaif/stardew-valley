@@ -69,6 +69,9 @@ class SoilLayer:
 
                     tile_type = "o"
 
+                    # all sides
+                    if t and b and r and l: tile_type = "x"
+
                     SoilTile(
                         pos = (index_col * TILE_SIZE, index_row * TILE_SIZE),
                         surf = self.soil_surfs[tile_type],
