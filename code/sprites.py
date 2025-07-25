@@ -40,7 +40,12 @@ class Tree(Generic):
     def __init__(self, pos, surf, groups, name):
         super().__init__(pos, surf, groups)
 
-        
+        # tree attributes
+        self.health = 5
+        self.alive = True
+        stump_path = f'./graphics/stumps/{"small" if name == "Small" else "large"}.png'
+        self.stump_surf = pygame.image.load(stump_path).convert_alpha()
+        self.invul_timer = Timer(200)
 
         # #apples
         self.apples_surf =  pygame.image.load("./graphics/fruit/apple.png")
