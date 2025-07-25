@@ -1,6 +1,7 @@
 import pygame
 from settings import *
 from pytmx.util_pygame import load_pygame
+from support import *
 
 class SoilTile(pygame.sprite.Sprite):
     def __init__(self, pos, surf, groups):
@@ -17,6 +18,8 @@ class SoilLayer:
 
         # graphics
         self.soil_surf = pygame.image.load("./graphics/soil/o.png")
+        self.soil_surfs = import_folder_dict("./graphics/soil/")
+        print(self.soil_surfs)
 
         # requirements
         # if the area is farmable
