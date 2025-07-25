@@ -14,6 +14,7 @@ class SoilLayer:
         # requirements
         # if the area is farmable
         self.create_soil_grid()
+        self.create_hit_rects()
         # if the soil has been watered
         # if the soil has a plant
 
@@ -24,4 +25,21 @@ class SoilLayer:
         self.grid = [ [[] for col in range(h_tiles)] for row in range(v_tiles) ]
         for x, y, _ in load_pygame("./data/map.tmx").get_layer_by_name("Farmable").tiles():
             self.grid[y][x].append("F")
-        print(self.grid)
+        
+    def create_hit_rects(self):
+        self.hit_rects = []
+        for index_row, row in enumerate(self.grid): # linha da matriz
+            for index_col, cell in enumerate(row): # coluna da matriz
+                if "F" in cell:
+                    x = index_col * TILE_SIZE
+                    y = index_row * TILE_SIZE
+                    rect = pygame.Rect(x,y,TILE_SIZE,TILE_SIZE)
+                    self.hit_rects.append(rect)
+
+    def get_hit(self, point):
+        for rect in self.hit_rects:
+            if rect.collidepoint(point):
+                x, y = rect.x // TILE_SIZE, rect.y // TILE_SIZE
+
+            if "F" in self.grid[y][x]:
+                print("farmable")

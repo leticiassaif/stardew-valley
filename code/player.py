@@ -4,7 +4,7 @@ from support import *
 from timer import Timer # type: ignore
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, group, collision_sprites, tree_sprites, interaction):
+    def __init__(self, pos, group, collision_sprites, tree_sprites, interaction, soil_layer):
         super().__init__(group)
     
         self.import_assets()
@@ -51,7 +51,7 @@ class Player(pygame.sprite.Sprite):
         #     "tomato" : 0
         # } CECIIII eu vi que tu adicionou outro, precisa de dois???
 
-        #Inventory
+        # Inventory
         self.item_inventory = {
             "wood" :   0,
             "apple" :  0,       
@@ -59,13 +59,15 @@ class Player(pygame.sprite.Sprite):
             "tomato" : 0
         }
         
-        #Interaction
+        # Interaction
         self.tree_sprites = tree_sprites
         self.interaction_sprites = interaction
         self.sleep = False
+        self.soil_layer = soil_layer
 
     def use_tool(self):
-        if self.selected_tool == "hoe": pass
+        if self.selected_tool == "hoe":
+            self.soil_layer.get_hit(self.target_pos)
 
         if self.selected_tool == "axe": 
             for tree in self.tree_sprites.sprites():
