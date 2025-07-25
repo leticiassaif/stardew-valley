@@ -177,7 +177,7 @@ class Player(pygame.sprite.Sprite):
         for sprite in self.collision_sprites.sprites():
             if hasattr(sprite, 'hitbox'): #é só para confirma
                 if sprite.hitbox.colliderect(self.hitbox):
-                    #Colisão em x
+                    # Colisão em x
                     if direction == "horizontal": 
                         if self.direction.x > 0: #direita
                             self.hitbox.right = sprite.hitbox.left
@@ -185,7 +185,7 @@ class Player(pygame.sprite.Sprite):
                             self.hitbox.left = sprite.hitbox.right
                         self.rect.centerx = self.hitbox.centerx
                         self.pos.x = self.hitbox.centerx
-                    #Colisão em y
+                    # Colisão em y
                     if direction == "vertical":
                         if self.direction.y > 0: #baixo
                             self.hitbox.bottom = sprite.hitbox.top
