@@ -29,7 +29,7 @@ class Level:
 
         #sky
         self.rain = Rain(self.all_sprites)
-        self.raining = randint(0,10) > 3 #ON/OFF da chuva, ta randomizando o  True  False
+        self.raining = randint(0,10) > 7 #ON/OFF da chuva, ta randomizando o  True  False
         self.soil_layer.raining = self.raining
 
     def setup(self):
@@ -93,20 +93,22 @@ class Level:
     def player_add(self, item):
         # O += random, foi add própria. Assim fica mais parecido com Stardew Valley
         if item == "wood":
-            self.player.item_inventory[item] += random.randint(1,3) 
+            self.player.item_inventory[item] += random.randint(1,3) # tentar ajeitar
         else: 
-            self.player.item_inventory[item] += 1  
+            self.player.item_inventory[item] += 1
 
     def reset(self): # level -> transition -> reset -> level
+        # plants
+        self.soil_layer.update_plants()
 
-        #soil
+        # soil
         self.soil_layer.remove_water()
-        self.raining = randint(0,10) > 3
+        self.raining = randint(0,10) > 7
         self.soil_layer.raining = self.raining
         if self.raining:
             self.soil_layer.water_all()
 
-        #apples on the trees
+        # apples on the trees
         for tree in self.tree_sprites.sprites():
             for apple in tree.apple_sprites.sprites():
                 apple.kill()
