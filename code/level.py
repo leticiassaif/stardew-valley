@@ -8,7 +8,7 @@ from support import *
 from transition import Transition
 from soil import SoilLayer
 from sky import Rain
-from random import randint
+from random import randint, random
 
 
 class Level:
@@ -91,11 +91,12 @@ class Level:
             z = layers["ground"])
 
     def player_add(self, item):
+        self.player.item_inventory[item] += 1
         # O += random, foi add própria. Assim fica mais parecido com Stardew Valley
-        if item == "wood":
-            self.player.item_inventory[item] += random.randint(1,3) # tentar ajeitar
-        else: 
-            self.player.item_inventory[item] += 1
+        # if item == "wood":
+        #     self.player.item_inventory[item] += random.randint(1,3) # tentar ajeitar
+        # else: 
+        #     self.player.item_inventory[item] += 1
 
     def reset(self): # level -> transition -> reset -> level
         # plants
@@ -121,6 +122,7 @@ class Level:
                     self.player_add(plant.plant_type)
                     plant.kill()
                     Particle(plant.rect.topleft, plant.image, self.all_sprites, layers["main"])
+                    self.soil_layer.grid[plant.rect.centery // TILE_SIZE][plant.rect.centerx // TILE_SIZE].remove("P")
 
     def run(self, dt):
         self.display_surface.fill("black")
