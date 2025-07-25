@@ -20,7 +20,7 @@ class Player(pygame.sprite.Sprite):
         # movement attributes
         self.direction = pygame.math.Vector2()
         self.pos = pygame.math.Vector2(self.rect.center)
-        self.speed = 200
+        self.speed = 250
 
         #Collision
         self.hitbox = self.rect.copy().inflate(-126,-70)
@@ -47,6 +47,14 @@ class Player(pygame.sprite.Sprite):
         self.item_inventory = {
             "wood" :   0,
             "apple" :  0,
+            "corn" :   0,
+            "tomato" : 0
+        }
+
+        #Inventory
+        self.item_inventory = {
+            "wood" :   0,
+            "apple" :  0,       
             "corn" :   0,
             "tomato" : 0
         }
