@@ -39,7 +39,8 @@ class SoilLayer:
     def get_hit(self, point):
         for rect in self.hit_rects:
             if rect.collidepoint(point):
-                x, y = rect.x // TILE_SIZE, rect.y // TILE_SIZE
+                x = rect.x // TILE_SIZE
+                y = rect.y // TILE_SIZE
 
             if "F" in self.grid[y][x]:
                 print("farmable")
