@@ -72,10 +72,15 @@ class SoilLayer:
                     # all sides
                     if all((t,b,r,l)): tile_type = "x"
 
-                    # horizontal tiles only
+                    # horizontal only
                     if l and not any((t,b,r)): tile_type = "r"
                     if r and not any((t,b,l)): tile_type = "l"
                     if l and r and not any((t,b)): tile_type = "lr"
+
+                    # vertical only
+                    if t and not any((b,r,l)): tile_type = "b"
+                    if b and not any((t,r,l)): tile_type = "t"
+                    if t and b and not any((r,l)): tile_type = "tb"
 
                     SoilTile(
                         pos = (index_col * TILE_SIZE, index_row * TILE_SIZE),
