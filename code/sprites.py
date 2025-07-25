@@ -11,6 +11,12 @@ class Generic(pygame.sprite.Sprite):
         self.z = z
         self.hitbox = self.rect.copy().inflate(-self.rect.width*0.2,-self.rect.height*0.75) # w < h
 
+class Interaction(Generic):
+    def __init__(self, pos, size, groups, name):
+        surf = pygame.Surface(size)
+        super().__init__(pos, surf, groups)
+        self.name = name
+
 class Water(Generic): #Não precisa de Hitbox
     def __init__(self, pos, frames, groups):
         # animation setup
@@ -59,7 +65,7 @@ class Tree(Generic):
         super().__init__(pos, surf, groups)
 
         # tree attributes
-        self.health = 3
+        self.health = 5
         self.alive = True
         stump_path = f'./graphics/stumps/{"small" if name == "Small" else "large"}.png'
         self.stump_surf = pygame.image.load(stump_path).convert_alpha()
