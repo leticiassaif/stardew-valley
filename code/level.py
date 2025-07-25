@@ -74,7 +74,10 @@ class Level:
             z = layers["ground"])
 
     def player_add(self, item):
-        self.player.item_inventory[item] += 1  
+        #O += random, foi add própria. Assim fica mais parecido com Stardew Valley
+        if item == "wood":
+            self.player.item_inventory[item] += random.randint(1,3) 
+        else: self.player.item_inventory[item] += 1  
 
     def run(self, dt):
         self.display_surface.fill("black")
