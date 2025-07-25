@@ -42,5 +42,5 @@ class SoilLayer:
                 x = rect.x // TILE_SIZE
                 y = rect.y // TILE_SIZE
 
-            if "F" in self.grid[y][x]:
-                print("farmable")
+                if "F" in self.grid[y][x]:
+                    print("farmable")
