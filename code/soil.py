@@ -19,7 +19,6 @@ class SoilLayer:
         # graphics
         self.soil_surf = pygame.image.load("./graphics/soil/o.png")
         self.soil_surfs = import_folder_dict("./graphics/soil/")
-        print(self.soil_surfs)
 
         # requirements
         # if the area is farmable
@@ -61,7 +60,16 @@ class SoilLayer:
         for index_row, row in enumerate(self.grid):
             for index_col, cell in enumerate(row):
                 if "X" in cell:
+
+                    # tile options
+                    t = "X" in self.grid[index_row - 1][index_col] # top
+                    b = "X" in self.grid[index_row + 1][index_col] # bottom
+                    r = "X" in row[index_col + 1] # right
+                    l = "X" in row[index_col - 1] # left
+
+                    tile_type = "o"
+
                     SoilTile(
                         pos = (index_col * TILE_SIZE, index_row * TILE_SIZE),
-                        surf = self.soil_surf,
+                        surf = self.soil_surfs[tile_type],
                         groups = [self.all_sprites, self.soil_sprites])
