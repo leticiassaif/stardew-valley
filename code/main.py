@@ -39,3 +39,5 @@ if __name__ == "__main__":
 # # para imagem : pygame.image.load(pasta/nome da imagem)
 # test_surface.fill("red")
 # text_surface = font.render("My game", False, "Green") #text, AA, color
+
+# #MOSTRAR HITBOX é em  Level class CameraGroup(pygame.sprite.Group):
