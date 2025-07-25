@@ -88,6 +88,12 @@ class SoilLayer:
                     if l and t and not any((b,r)): tile_type = "br"
                     if r and t and not any((b,l)): tile_type = "bl"
 
+                    # T shapes
+                    if all((t,b,r)) and not l: tile_type = "tbr"
+                    if all((t,b,l)) and not r: tile_type = "tbl"
+                    if all((t,r,l)) and not b: tile_type = "lrb"
+                    if all((b,r,l)) and not t: tile_type = "lrt"
+
                     SoilTile(
                         pos = (index_col * TILE_SIZE, index_row * TILE_SIZE),
                         surf = self.soil_surfs[tile_type],
