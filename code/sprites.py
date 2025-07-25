@@ -78,7 +78,10 @@ class Tree(Generic):
         #remove an apple
         if len(self.apple_sprites) > 0:
             random_apple = choice(self.apple_sprites.sprites())
-            Particle(random_apple.rect.topleft,random_apple.image, self.groups()[0], layers["fruit"]) #pos, surf, group, z
+            Particle(pos = random_apple.rect.topleft,
+                     surf = random_apple.image, 
+                     groups = self.groups()[0],
+                     z = layers["fruit"]) #pos, surf, group, z
             random_apple.kill()
 
     def check_death(self):
