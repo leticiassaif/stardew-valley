@@ -1,6 +1,7 @@
 import pygame
 from settings import *
-from random import randint
+from random import randint, choice
+from timer import Timer #:ignore
 
 class Generic(pygame.sprite.Sprite):
     def __init__(self, pos, surf, groups, z = layers["main"]):
@@ -53,6 +54,26 @@ class Tree(Generic):
         self.apple_sprites = pygame.sprite.Group()
         self.create_fruit()
     
+    def damage(self):
+        #dando dano na tree
+        self.health -= 1
+
+        #remove an apple
+        if len(self.apple_sprites) > 0:
+            random_apple = choice(self.apple_sprites.sprites())
+            random_apple.kill()
+
+    def check_death(self):
+        if self.health <= 0:
+            self.image = self.stump_surf
+            self.rect = self.image.get_rect(midbottom = self.rect.midbottom)
+            self.hitbox = self.rect.copy().inflate(-10, -self.rect.height*0.6)
+            self.alive = False
+    
+    def update(self, dt):
+        if self.alive:
+            self.check_death()
+
     def create_fruit(self):
         for pos in self.apple_pos:
             if randint(0,10) < 2:
@@ -63,3 +84,4 @@ class Tree(Generic):
                     surf = self.apples_surf,
                     groups = [self.apple_sprites,self.groups()[0]],#Tá chamando [self.all_sprites, self.collision_sprites]
                     z = layers["fruit"])
+    
