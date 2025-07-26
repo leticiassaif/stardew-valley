@@ -7,6 +7,8 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
         pygame.display.set_caption("Garden")
+        icon = pygame.image.load("./graphics/icon.png")
+        pygame.display.set_icon(icon)
         self.clock = pygame.time.Clock()
         self.level = Level()
 
