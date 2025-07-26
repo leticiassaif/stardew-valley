@@ -40,4 +40,4 @@ if __name__ == "__main__":
 # test_surface.fill("red")
 # text_surface = font.render("My game", False, "Green") #text, AA, color
 
-# #MOSTRAR HITBOX é em  Level class CameraGroup(pygame.sprite.Group):
+# #MOSTRAR HITBOX é em  Level class CameraGroup(pygame.sprite.Group):'
