@@ -4,7 +4,7 @@ from support import *
 from timer import Timer # type: ignore
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, group, collision_sprites, tree_sprites, interaction, soil_layer):
+    def __init__(self, pos, group, collision_sprites, tree_sprites, interaction, soil_layer, toggle_shop):
         super().__init__(group)
     
         self.import_assets()
@@ -20,7 +20,7 @@ class Player(pygame.sprite.Sprite):
         # movement attributes
         self.direction = pygame.math.Vector2()
         self.pos = pygame.math.Vector2(self.rect.center)
-        self.speed = 250
+        self.speed = 500
 
         # Collision
         self.hitbox = self.rect.copy().inflate(-126,-70)
@@ -44,13 +44,6 @@ class Player(pygame.sprite.Sprite):
         self.seed_index = 0
         self.selected_seed = self.seeds[self.seed_index]
 
-        # self.item_inventory = {
-        #     "wood" :   0,
-        #     "apple" :  0,
-        #     "corn" :   0,
-        #     "tomato" : 0
-        # } CECIIII eu vi que tu adicionou outro, precisa de dois???
-
         # Inventory
         self.item_inventory = {
             "wood" :   0,
@@ -58,12 +51,18 @@ class Player(pygame.sprite.Sprite):
             "corn" :   0,
             "tomato" : 0
         }
-        
+        self.seed_inventory = {
+            "corn": 5,
+            "tomato": 5,
+        }
+        self.money = 200
+
         # Interaction
         self.tree_sprites = tree_sprites
         self.interaction_sprites = interaction
         self.sleep = False
         self.soil_layer = soil_layer
+        self.toggle_shop = toggle_shop
 
     def use_tool(self):
         if self.selected_tool == "hoe":
@@ -81,7 +80,10 @@ class Player(pygame.sprite.Sprite):
         self.target_pos = self.rect.center + player_tool_offset[self.status.split('_')[0]]
 
     def use_seed(self):
-        self.soil_layer.plant_seed(self.target_pos, self.selected_seed)
+        #player  só vai poder plantar  se tiver semente
+        if self.seed_inventory[self.selected_seed] > 0:
+            self.soil_layer.plant_seed(self.target_pos, self.selected_seed)
+            self.seed_inventory[self.selected_seed] -= 1
 
     def import_assets(self):
         self.animations = {"up": [],"down": [],"left": [],"right": [],
@@ -150,16 +152,17 @@ class Player(pygame.sprite.Sprite):
                 self.seed_index = self.seed_index if self.seed_index < len(self.seeds) else 0
                 self.selected_seed = self.seeds[self.seed_index]
             
-            #dormir
+            #Interação Cama e Trader
             if keys[pygame.K_RETURN] or keys[pygame.K_LSHIFT]:
+                self.toggle_shop() # comentar isso dps, é para teste somente
                 collide_interaction_sprite = pygame.sprite.spritecollide(self, self.interaction_sprites,False) #Padrão areas de interação
                 if collide_interaction_sprite:
                     if collide_interaction_sprite[0].name == "Trader":
-                        pass
+                        self.toggle_shop()
                     else:
                         self.status = "left_idle"
                         self.sleep = True
-
+            
     def get_status(self):
         # idle status
         if self.direction.magnitude() == 0:
