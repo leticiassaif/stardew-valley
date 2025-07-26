@@ -39,6 +39,13 @@ class Level:
         self.menu = Menu(self.player, self.toggle_shop)
         self.shop_active = False #ON/OFF menu do shop
 
+        #music
+        self.music = pygame.mixer.Sound("./audio/music.mp3")
+        self.music.play(loops = -1)
+        self.music.set_volume(0.05)
+        self.success = pygame.mixer.Sound("./audio/success.wav")
+        self.success.set_volume(0.1)
+
     def setup(self):
         tmx_data = load_pygame("./data/map.tmx")
 
@@ -102,12 +109,12 @@ class Level:
             z = layers["ground"])
 
     def player_add(self, item):
-        self.player.item_inventory[item] += 1
         # O += random, foi add própria. Assim fica mais parecido com Stardew Valley
         if item == "wood":
             self.player.item_inventory[item] += randint(1,3)
         else: 
             self.player.item_inventory[item] += 1
+        self.success.play()
 
     def toggle_shop(self):
 

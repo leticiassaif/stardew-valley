@@ -20,7 +20,7 @@ class Player(pygame.sprite.Sprite):
         # movement attributes
         self.direction = pygame.math.Vector2()
         self.pos = pygame.math.Vector2(self.rect.center)
-        self.speed = 500
+        self.speed = 200
 
         # Collision
         self.hitbox = self.rect.copy().inflate(-126,-70)
@@ -64,6 +64,10 @@ class Player(pygame.sprite.Sprite):
         self.soil_layer = soil_layer
         self.toggle_shop = toggle_shop
 
+        #sounds
+        self.watering = pygame.mixer.Sound("./audio/water.mp3")
+        self.watering.set_volume(0.1)
+
     def use_tool(self):
         if self.selected_tool == "hoe":
             self.soil_layer.get_hit(self.target_pos)
@@ -75,6 +79,7 @@ class Player(pygame.sprite.Sprite):
 
         if self.selected_tool == "water":
             self.soil_layer.water(self.target_pos)
+            self.watering.play()
 
     def get_target_pos(self):
         self.target_pos = self.rect.center + player_tool_offset[self.status.split('_')[0]]
@@ -154,7 +159,7 @@ class Player(pygame.sprite.Sprite):
             
             #Interação Cama e Trader
             if keys[pygame.K_RETURN] or keys[pygame.K_LSHIFT]:
-                self.toggle_shop() # comentar isso dps, é para teste somente
+                # self.toggle_shop() # comentar isso dps, é para teste somente
                 collide_interaction_sprite = pygame.sprite.spritecollide(self, self.interaction_sprites,False) #Padrão areas de interação
                 if collide_interaction_sprite:
                     if collide_interaction_sprite[0].name == "Trader":

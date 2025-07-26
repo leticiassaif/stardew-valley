@@ -71,7 +71,6 @@ class Menu:
 
                 #get the item
                 current_item = self.options[self.index]
-                print(current_item)
 
                 #sell
                 if self.index <= self.sell_border:
