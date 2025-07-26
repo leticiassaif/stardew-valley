@@ -4,6 +4,15 @@ from support import import_folder
 from sprites import Generic
 from random import randint, choice
 
+class  Sky:
+    #Daytime transition
+    def __init__(self):
+        self.display_surface = pygame.display.get_surface()
+        self.full_surf = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+    
+    def display(self, dt):
+        self.display_surface.blit(self.full_surf,(0,0), special_flags= pygame.BLEND_RGB_MULT)
+
 class Drop(Generic):
     def __init__(self, surf, pos, moving, groups, z):
         
