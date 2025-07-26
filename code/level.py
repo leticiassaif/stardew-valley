@@ -7,7 +7,7 @@ from pytmx.util_pygame import load_pygame
 from support import *
 from transition import Transition
 from soil import SoilLayer
-from sky import Rain
+from sky import Rain, Sky
 from random import randint, random
 
 
@@ -31,6 +31,7 @@ class Level:
         self.rain = Rain(self.all_sprites)
         self.raining = randint(0,10) > 7 #ON/OFF da chuva, ta randomizando o  True  False
         self.soil_layer.raining = self.raining
+        self.sky = Sky()
 
     def setup(self):
         tmx_data = load_pygame("./data/map.tmx")
@@ -93,10 +94,10 @@ class Level:
     def player_add(self, item):
         self.player.item_inventory[item] += 1
         # O += random, foi add própria. Assim fica mais parecido com Stardew Valley
-        # if item == "wood":
-        #     self.player.item_inventory[item] += random.randint(1,3) # tentar ajeitar
-        # else: 
-        #     self.player.item_inventory[item] += 1
+        if item == "wood":
+            self.player.item_inventory[item] += randint(1,3)
+        else: 
+            self.player.item_inventory[item] += 1
 
     def reset(self): # level -> transition -> reset -> level
         # plants
@@ -114,6 +115,9 @@ class Level:
             for apple in tree.apple_sprites.sprites():
                 apple.kill()
             tree.create_fruit()
+
+        #sky
+        self.sky.start_color = [255,255,255]
 
     def plant_collision(self):
         if self.soil_layer.plant_sprites:
@@ -135,6 +139,9 @@ class Level:
         #rain
         if self.raining:
             self.rain.update()
+
+        #daytime:
+        self.sky.display(dt)
 
         #transition overlay
         if self.player.sleep:

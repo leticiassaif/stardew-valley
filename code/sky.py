@@ -9,8 +9,15 @@ class  Sky:
     def __init__(self):
         self.display_surface = pygame.display.get_surface()
         self.full_surf = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-    
+        self.start_color = [255, 255, 255] 
+        self.end_color = (38, 101, 189) #"Filtro de luz" da noite
+
     def display(self, dt):
+        for index, value in enumerate(self.end_color): #transição dia noite
+            if self.start_color[index] > value:
+                self.start_color[index] -= 2*dt #diminuindo até 255 virar 38,101,189
+
+        self.full_surf.fill(self.start_color)
         self.display_surface.blit(self.full_surf,(0,0), special_flags= pygame.BLEND_RGB_MULT)
 
 class Drop(Generic):
