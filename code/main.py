@@ -6,7 +6,7 @@ class Game:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
-        pygame.display.set_caption("Garden")
+        pygame.display.set_caption("Titico's Garden")
         icon = pygame.image.load("./graphics/icon.png")
         pygame.display.set_icon(icon)
         self.clock = pygame.time.Clock()
@@ -26,20 +26,5 @@ class Game:
 if __name__ == "__main__":
     game = Game()
     game.run()
-
-# #fonte
-# font = pygame.font.Font(None, 50) #font type, font size -- font/*nome*.ttf
-# screen.blit(test_surface,(200,100)) #surface, position
-# screen.blit(text_surface,(300,50))
-
-
-# clock.tick(60) # 60fps no máximo
-# # else running = False
-
-# #surfaces
-# test_surface = pygame.Surface((100,200))
-# # para imagem : pygame.image.load(pasta/nome da imagem)
-# test_surface.fill("red")
-# text_surface = font.render("My game", False, "Green") #text, AA, color
 
 # #MOSTRAR HITBOX é em  Level class CameraGroup(pygame.sprite.Group):'
