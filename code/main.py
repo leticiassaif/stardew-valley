@@ -27,4 +27,6 @@ if __name__ == "__main__":
     game = Game()
     game.run()
 
+# teste
+
 # #MOSTRAR HITBOX é em  Level class CameraGroup(pygame.sprite.Group):'
