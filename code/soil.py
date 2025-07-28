@@ -70,10 +70,11 @@ class SoilLayer:
 
         # requirements
         # if the area is farmable
-        self.create_soil_grid()
-        self.create_hit_rects()
         # if the soil has been watered
         # if the soil has a plant   
+
+        self.create_soil_grid()
+        self.create_hit_rects()
 
         #sounds
         self.hoe_sound = pygame.mixer.Sound("./audio/hoe.wav")
