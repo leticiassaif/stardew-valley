@@ -46,7 +46,7 @@ class Level:
         self.success = pygame.mixer.Sound("./audio/success.wav")
         self.success.set_volume(0.1)
 
-    def setup(self):
+    def setup(self): # pegar o mapa do tiled
         tmx_data = load_pygame("./data/map.tmx")
 
         # house
@@ -110,7 +110,7 @@ class Level:
 
     def player_add(self, item):
         if item == "wood":
-            self.player.item_inventory[item] += randint(1,3)
+            self.player.item_inventory[item] += randint(1,3) # quantidade varia
         else: 
             self.player.item_inventory[item] += 1
         self.success.play()
@@ -139,7 +139,7 @@ class Level:
         #sky
         self.sky.start_color = [255,255,255]
 
-    def plant_collision(self):
+    def plant_collision(self): # quando a planta tiver pronta, um collide é a colheita
         if self.soil_layer.plant_sprites:
             for plant in self.soil_layer.plant_sprites.sprites():
                 if plant.harvestable and plant.rect.colliderect(self.player.hitbox):
