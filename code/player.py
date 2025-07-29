@@ -18,9 +18,9 @@ class Player(pygame.sprite.Sprite):
         self.z = layers["main"]
 
         self.screen = screen
-        self.current_energy = 200
+        self.current_energy = 270
         self.maximum_energy = 270
-        self.energy_bar_length = 540
+        self.energy_bar_length = 400
         self.energy_ratio = self.maximum_energy / self.energy_bar_length
         # self.current_xp =
 
@@ -143,7 +143,7 @@ class Player(pygame.sprite.Sprite):
                 self.timers["tool use"].activate()
                 self.direction = pygame.math.Vector2()
                 self.frame_index = 0
-                self.get_drained(50)
+                self.get_drained(4)
             
             # inv tool
             if keys[pygame.K_q] and not self.timers["tool switch"].active:
@@ -157,7 +157,7 @@ class Player(pygame.sprite.Sprite):
                 self.timers["seed use"].activate()
                 self.direction = pygame.math.Vector2()
                 self.frame_index = 0
-                self.get_drained(20)
+                # self.get_drained(2) diminui muito por algum motivo?
 
             # inv seed
             if keys[pygame.K_e] and not self.timers["seed switch"].active:
@@ -201,6 +201,7 @@ class Player(pygame.sprite.Sprite):
     #         self.current_energy = self.maximum_energy
 
     def basic_energy(self):
+        pygame.draw.rect(self.screen, (255,255,255), (10, 10, self.energy_bar_length, 25))
         pygame.draw.rect(self.screen, (219,86,125), (10, 10, self.current_energy / self.energy_ratio, 25))
         pygame.draw.rect(self.screen, (255,255,255), (10, 10, self.energy_bar_length, 25), 4)
 
