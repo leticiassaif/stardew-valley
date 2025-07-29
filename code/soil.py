@@ -5,20 +5,20 @@ from support import *
 from random import choice
 
 class SoilTile(pygame.sprite.Sprite):
-    def __init__(self, pos, surf, groups):
+    def __init__(self, pos, surf, groups): # inicialização do solo
         super().__init__(groups)
         self.image = surf
         self.rect = self.image.get_rect(topleft = pos)
         self.z = layers["soil"]
 
-class WaterTile(pygame.sprite.Sprite):
+class WaterTile(pygame.sprite.Sprite): # solo depois de regar
     def __init__(self, pos, surf, groups):
         super().__init__(groups)
         self.image = surf
         self.rect = self.image.get_rect(topleft = pos)
         self.z = layers["soil water"]
 
-class Plant(pygame.sprite.Sprite):
+class Plant(pygame.sprite.Sprite): # plantação
     def __init__(self, plant_type, groups, soil, check_watered):
         super().__init__(groups)
 
@@ -28,7 +28,7 @@ class Plant(pygame.sprite.Sprite):
         self.soil = soil
         self.check_watered = check_watered
 
-        # plant growth
+        # plant growth / crescimento da planta
         self.age = 0
         self.max_age = len(self.frames) - 1
         self.grow_speed = growing_speed[plant_type]
@@ -41,13 +41,16 @@ class Plant(pygame.sprite.Sprite):
         self.z = layers["ground plant"]
 
     def grow(self):
+        # se foi regada, ela cresce
         if self.check_watered(self.rect.center):
             self.age += self.grow_speed
 
+            # depois de certo tempo, o player não pode mais passar por cima da planta
             if int(self.age) > 0:
                 self.z = layers["main"]
                 self.hitbox = self.rect.copy().inflate(-26, - self.rect.height * 0.4)
 
+            # pronto para a colheita
             if self.age >= self.max_age:
                 self.age = self.max_age
                 self.harvestable = True
@@ -66,17 +69,12 @@ class SoilLayer:
 
         # graphics
         self.soil_surfs = import_folder_dict("./graphics/soil/")
-        self.water_surf = import_folder("./graphics/soil_water/")
-
-        # requirements
-        # if the area is farmable
-        # if the soil has been watered
-        # if the soil has a plant   
+        self.water_surf = import_folder("./graphics/soil_water/")  
 
         self.create_soil_grid()
         self.create_hit_rects()
 
-        #sounds
+        # som
         self.hoe_sound = pygame.mixer.Sound("./audio/hoe.wav")
         self.hoe_sound.set_volume(0.1)
 
@@ -87,11 +85,12 @@ class SoilLayer:
         ground = pygame.image.load("./graphics/world/ground.png")
         h_tiles, v_tiles = ground.get_width() // TILE_SIZE, ground.get_height() // TILE_SIZE
         
+        # se tiver "F" é "farmable", ou seja, pode arar esse solo
         self.grid = [ [[] for col in range(h_tiles)] for row in range(v_tiles) ]
         for x, y, _ in load_pygame("./data/map.tmx").get_layer_by_name("Farmable").tiles():
             self.grid[y][x].append("F")
         
-    def create_hit_rects(self):
+    def create_hit_rects(self): # permitir arar
         self.hit_rects = []
         for index_row, row in enumerate(self.grid): # linha da matriz
             for index_col, cell in enumerate(row): # coluna da matriz
@@ -101,7 +100,7 @@ class SoilLayer:
                     rect = pygame.Rect(x,y,TILE_SIZE,TILE_SIZE)
                     self.hit_rects.append(rect)
 
-    def get_hit(self, point):
+    def get_hit(self, point): # se tiver o X, levou hit
         for rect in self.hit_rects:
             if rect.collidepoint(point):
                 self.hoe_sound.play()
@@ -113,7 +112,7 @@ class SoilLayer:
                     self.grid[y][x].append("X")
                     self.create_soil_tiles()
                     if self.raining:
-                        self.water_all()
+                        self.water_all() # quando chove, todos os solos arados fica regados
 
     def water(self, target_pos):
         for soil_sprite in self.soil_sprites.sprites():
@@ -139,7 +138,7 @@ class SoilLayer:
                     WaterTile((x,y), choice(self.water_surf), [self.all_sprites, self.water_sprites])
 
     def remove_water(self):
-        #destroy wall water sprites
+        #destroy wall water sprites, quando o dia reseta, o solo não está regado
         for sprite in self.water_sprites.sprites():
             sprite.kill()
         #clean the grid
@@ -148,7 +147,7 @@ class SoilLayer:
                 if "W" in cell:
                     cell.remove('W')
 
-    def check_watered(self, pos):
+    def check_watered(self, pos): # olha se o solo foi regado
         x = pos[0] // TILE_SIZE
         y = pos[1] // TILE_SIZE
         cell = self.grid[y][x]
@@ -162,7 +161,7 @@ class SoilLayer:
                 
                 x = soil_sprite.rect.x // TILE_SIZE
                 y = soil_sprite.rect.y // TILE_SIZE
-                if "P" not in self.grid[y][x]:
+                if "P" not in self.grid[y][x]: # não permite a plantação de mais uma semente ao mesmo tempo
                     self.grid[y][x].append("P")
                     Plant(seed, [self.all_sprites, self.plant_sprites, self.collision_sprites], soil_sprite, self.check_watered)
 

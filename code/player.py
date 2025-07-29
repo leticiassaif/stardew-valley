@@ -4,7 +4,7 @@ from support import *
 from timer import Timer # type: ignore
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, group, collision_sprites, tree_sprites, interaction, soil_layer, toggle_shop, screen):
+    def __init__(self, pos, group, collision_sprites, tree_sprites, interaction, soil_layer, toggle_shop, toggle_pause, screen):
         super().__init__(group)
     
         self.import_assets()
@@ -17,19 +17,21 @@ class Player(pygame.sprite.Sprite):
         self.hitbox = self.rect.copy().inflate((-126,-70))
         self.z = layers["main"]
 
+        # barra de energia
         self.screen = screen
         self.current_energy = 270
         self.maximum_energy = 270
         self.energy_bar_length = 400
         self.energy_ratio = self.maximum_energy / self.energy_bar_length
+
         # self.current_xp =
 
-        # movement attributes
+        # atributos de movimentação
         self.direction = pygame.math.Vector2()
         self.pos = pygame.math.Vector2(self.rect.center)
         self.speed = 200
 
-        # Collision
+        # colisão
         self.hitbox = self.rect.copy().inflate(-126,-70)
         self.collision_sprites  = collision_sprites
 
@@ -46,12 +48,12 @@ class Player(pygame.sprite.Sprite):
         self.tool_index = 0
         self.selected_tool = self.tools[self.tool_index]
 
-        # seeds
+        # sementes
         self.seeds = ["corn", "tomato"]
         self.seed_index = 0
         self.selected_seed = self.seeds[self.seed_index]
 
-        # Inventory
+        # inventário
         self.item_inventory = {
             "wood" :   0,
             "apple" :  0,       
@@ -64,18 +66,19 @@ class Player(pygame.sprite.Sprite):
         }
         self.money = 200
 
-        # Interaction
+        # interação
         self.tree_sprites = tree_sprites
         self.interaction_sprites = interaction
         self.sleep = False
         self.soil_layer = soil_layer
         self.toggle_shop = toggle_shop
+        self.toggle_pause = toggle_pause
 
-        #sounds
+        # som
         self.watering = pygame.mixer.Sound("./audio/water.mp3")
         self.watering.set_volume(0.1)
 
-    def use_tool(self):
+    def use_tool(self): # utilização de cada tool
         if self.selected_tool == "hoe":
             self.soil_layer.get_hit(self.target_pos)
 
@@ -92,12 +95,13 @@ class Player(pygame.sprite.Sprite):
         self.target_pos = self.rect.center + player_tool_offset[self.status.split('_')[0]]
 
     def use_seed(self):
-        #player  só vai poder plantar  se tiver semente
+         #player só vai poder plantar  se tiver semente
         if self.seed_inventory[self.selected_seed] > 0:
             self.soil_layer.plant_seed(self.target_pos, self.selected_seed)
             self.seed_inventory[self.selected_seed] -= 1
 
     def import_assets(self):
+        # import os assets do player, junto com a animação
         self.animations = {"up": [],"down": [],"left": [],"right": [],
 						   "right_idle": [],"left_idle": [],"up_idle": [],"down_idle": [],
 						   "right_hoe": [],"left_hoe": [],"up_hoe": [],"down_hoe": [],
@@ -119,7 +123,7 @@ class Player(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
 
         if not self.timers["tool use"].active and not self.sleep:
-            # directions
+            # direção
             if keys[pygame.K_UP] or keys[pygame.K_w] :
                 self.direction.y = -1
                 self.status = "up"
@@ -138,38 +142,37 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.direction.x = 0
 
-            # tool use
+            # tool uso
             if keys[pygame.K_SPACE]:
                 self.timers["tool use"].activate()
                 self.direction = pygame.math.Vector2()
                 self.frame_index = 0
                 self.get_drained(4)
             
-            # inv tool
+            # inventário tool
             if keys[pygame.K_q] and not self.timers["tool switch"].active:
                 self.timers["tool switch"].activate()
                 self.tool_index += 1
                 self.tool_index = self.tool_index if self.tool_index < len(self.tools) else 0
                 self.selected_tool = self.tools[self.tool_index]
 
-            # seed use
+            # semente uso
             if keys[pygame.K_LCTRL]:
                 self.timers["seed use"].activate()
                 self.direction = pygame.math.Vector2()
                 self.frame_index = 0
-                # self.get_drained(2) diminui muito por algum motivo?
 
-            # inv seed
+            # inventário semente
             if keys[pygame.K_e] and not self.timers["seed switch"].active:
                 self.timers["seed switch"].activate()
                 self.seed_index += 1
                 self.seed_index = self.seed_index if self.seed_index < len(self.seeds) else 0
                 self.selected_seed = self.seeds[self.seed_index]
             
-            #Interação Cama e Trader
+            # Interação Cama e Trader
             if keys[pygame.K_RETURN] or keys[pygame.K_LSHIFT]:
                 # self.toggle_shop() # comentar isso dps, é para teste somente
-                collide_interaction_sprite = pygame.sprite.spritecollide(self, self.interaction_sprites,False) #Padrão areas de interação
+                collide_interaction_sprite = pygame.sprite.spritecollide(self, self.interaction_sprites,False) # Padrão areas de interação
                 if collide_interaction_sprite:
                     if collide_interaction_sprite[0].name == "Trader":
                         self.toggle_shop()
@@ -177,13 +180,17 @@ class Player(pygame.sprite.Sprite):
                         self.status = "left_idle"
                         self.sleep = True
                         self.current_energy = self.maximum_energy
+
+            # abrir o menu do pause
+            if keys[pygame.K_p]:
+                self.toggle_pause()
             
     def get_status(self):
         # idle status
         if self.direction.magnitude() == 0:
             self.status = self.status.split("_")[0]+"_idle"
 
-        # tool use
+        # tool uso
         if self.timers["tool use"].active:
             self.status = self.status.split("_")[0]+"_"+self.selected_tool
 
@@ -201,7 +208,7 @@ class Player(pygame.sprite.Sprite):
     #     if self.current_energy >= self.maximum_energy:
     #         self.current_energy = self.maximum_energy
 
-    def basic_energy(self):
+    def basic_energy(self): # barra de energia
         pygame.draw.rect(self.screen, (255,255,255), (10, 10, self.energy_bar_length, 25))
         pygame.draw.rect(self.screen, (219,86,125), (10, 10, self.current_energy / self.energy_ratio, 25))
         pygame.draw.rect(self.screen, (255,255,255), (10, 10, self.energy_bar_length, 25), 4)
@@ -232,23 +239,23 @@ class Player(pygame.sprite.Sprite):
                         self.pos.y = self.hitbox.centery
         
     def move(self, dt):
-        # normalizing a vector, so it doesn't move faster if going in 2 directions combined
+        # normalizando o vetor, para não se mover mais rápido quando vai em duas direções ao mesmo tempo
         if self.direction.magnitude() > 0:
             self.direction = self.direction.normalize()
         
-        # horizontal movement
+        # horizontal movimento
         self.pos.x += self.direction.x * self.speed * dt
         self.hitbox.centerx = round(self.pos.x) 
         self.rect.centerx = self.hitbox.centerx
         self.collision("horizontal")
         
-        # vertical movement
+        # vertical movimento
         self.pos.y += self.direction.y * self.speed * dt
         self.hitbox.centery = round(self.pos.y)
         self.rect.centery = self.hitbox.centery
         self.collision("vertical")
 
-    def update(self, dt):
+    def update(self, dt): # atualiza as funções
         self.input()
         self.get_status()
         self.basic_energy()

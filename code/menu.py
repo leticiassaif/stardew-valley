@@ -1,39 +1,39 @@
-import pygame
+import pygame, sys
 from settings import *
 from timer import Timer # type: ignore
 
 class Menu:
     def __init__(self, player, toggle_menu):
         
-        #general setup
+        # general setup
         self.player = player
         self.toggle_menu = toggle_menu
         self.display_surface = pygame.display.get_surface()
         self.font = pygame.font.Font("./font/LycheeSoda.ttf", 30)
         
-        #options
+        # options
         self.width = 400
         self.space = 10
         self.padding = 8
 
-        #entries
+        # entries
         self.options =  list(self.player.item_inventory.keys()) + list(self.player.seed_inventory.keys())
         self.sell_border =  len(self.player.item_inventory) - 1 #se > buying ou < selling
         self.setup()
 
-        #movement
-        self.index = 0 #movimentação da loja
-        self.timer = Timer(200) #200ms para mudar de item para não ficar rápido demais
+        # movement
+        self.index = 0 # movimentação da loja
+        self.timer = Timer(200) # 200ms para mudar de item para não ficar rápido demais
         
     def display_money(self):
         text_surf = self.font.render(f"R${self.player.money}", False, "Black")
         text_rect = text_surf.get_rect(midbottom = (SCREEN_WIDTH / 2,SCREEN_HEIGHT - 20))
 
-        pygame.draw.rect(self.display_surface, "White",text_rect.inflate(10,10),0,4) #4 deixa o rect redondo
+        pygame.draw.rect(self.display_surface, "White",text_rect.inflate(10,10),0,4) # 4 deixa o rect redondo
         self.display_surface.blit(text_surf,text_rect)
 
     def setup(self):
-        #create the text surf
+        # create the text surf
         self.text_surfs = []
         self.total_height = 0
 
@@ -126,3 +126,110 @@ class Menu:
             amount_list = list(self.player.item_inventory.values()) + list(self.player.seed_inventory.values())
             amount = amount_list[text_index]
             self.show_entry(text_surf, amount, top, self.index == text_index)
+
+class Pause(Menu):
+    def setup(self):
+        self.pause_surfs = []
+        self.total_height = 0
+
+        self.pause_options = ["resume", "controls", "quit"]
+
+        for i in self.pause_options:
+            pause_surf = self.font.render(i, False, "black")
+            self.pause_surfs.append(pause_surf)
+            self.total_height += pause_surf.get_height() + (self.padding*2)
+
+        self.total_height += (len(self.pause_surfs) - 1) * self.space
+        self.menu_top = SCREEN_HEIGHT / 2 - self.total_height /  2
+        self.main_rect = pygame.Rect(SCREEN_WIDTH/2 - self.width/2,self.menu_top,self.width,self.total_height)
+
+        self.controls = False
+
+    def input(self):
+        keys = pygame.key.get_pressed()
+        self.timer.update()
+
+        if not self.timer.active:
+            if keys[pygame.K_UP]:
+                self.index -= 1
+                self.timer.activate()
+
+            if keys[pygame.K_DOWN]:
+                self.index += 1
+                self.timer.activate()
+
+        if keys[pygame.K_SPACE] or keys[pygame.K_RETURN]:
+            self.timer.activate()
+            selected_option = self.pause_options[self.index]
+            if selected_option == "resume":
+                self.toggle_menu()
+            elif selected_option == "quit":
+                pygame.quit()
+                sys.exit()
+            else:
+                self.controls = True
+
+        if self.controls and keys[pygame.K_ESCAPE]:
+            self.controls = False
+            self.timer.activate()
+
+        # Clamp value
+        if self.index < 0:
+            self.index = len(self.pause_surfs) - 1
+        elif self.index > len(self.pause_surfs) - 1:
+            self.index = 0
+
+    def update(self):
+        # olha o input
+        self.input()
+
+        if self.controls:
+
+            # Draw a background box
+            box_rect = pygame.Rect(SCREEN_WIDTH//2 - 200, SCREEN_HEIGHT//2 - 100, 400, 200)
+            pygame.draw.rect(self.display_surface, "White", box_rect, 0, 8)
+            pygame.draw.rect(self.display_surface, "Black", box_rect, 4, 8)
+            
+            # texto dos controles
+            controls = [
+                "controls",
+                "movement: arrows or wasd",
+                "use tool: space",
+                "switch tools: q",
+                "use seed: left ctrl",
+                "switch seeds: e",
+                "pause: p",
+                "sleep: return",
+                "shop: return or right ctrl",
+                "leave menu: esc"
+            ]
+
+            # ajustar o tamanho do coisa
+            line_height = self.font.get_height() + 10
+            box_height = len(controls) * line_height + 40
+            box_width = 440
+
+            # x, y, w, h
+            box_rect = pygame.Rect(SCREEN_WIDTH // 2 - box_width // 2, SCREEN_HEIGHT // 2 - box_height // 2, box_width, box_height)
+            pygame.draw.rect(self.display_surface, "White", box_rect, 0, 8)
+            pygame.draw.rect(self.display_surface, "Black", box_rect, 4, 8)
+
+            # loop para adicionar os controles
+            for i, line in enumerate(controls):
+                text_surf = self.font.render(line, False, "Black")
+                text_rect = text_surf.get_rect(center=(SCREEN_WIDTH//2, box_rect.top + 30 + i * line_height))
+                self.display_surface.blit(text_surf, text_rect)
+            
+        else:
+            # mostra as opções do menu de pause
+            for pause_index, pause_surf in enumerate(self.pause_surfs): 
+                top = self.main_rect.top + pause_index * ( pause_surf.get_height() + (self.padding * 2) + self.space)
+                background_rect = pygame.Rect(self.main_rect.left, top, self.width, pause_surf.get_height() + (self.padding*2))
+
+                pygame.draw.rect(self.display_surface, "White", background_rect, 0, 4)
+                text_rect = pause_surf.get_rect(midleft=(self.main_rect.left + 20, background_rect.centery))
+
+                self.display_surface.blit(pause_surf, text_rect)
+
+                if self.index == pause_index:
+                    pygame.draw.rect(self.display_surface, "Black", background_rect, 4, 4)
