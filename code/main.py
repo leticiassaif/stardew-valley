@@ -10,6 +10,8 @@ class Game:
         icon = pygame.image.load("./graphics/icon.png")
         pygame.display.set_icon(icon)
         self.clock = pygame.time.Clock()
+        # self.game_start = False
+        # self.game_pause = False
         self.level = Level()
 
     def run(self): # loop do jogo
@@ -18,6 +20,9 @@ class Game:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+                # if event.type == pygame.KEYDOWN:
+                #     if event.key == pygame.K_p:
+                #         self.game_pause = not self.game_pause
             
             dt = self.clock.tick() / 1000
             self.level.run(dt)

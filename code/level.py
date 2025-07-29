@@ -46,6 +46,9 @@ class Level:
         self.success = pygame.mixer.Sound("./audio/success.wav")
         self.success.set_volume(0.1)
 
+        # pause menu
+        self.game_paused = False # on & off do pause
+
     def setup(self): # pegar o mapa do tiled
         tmx_data = load_pygame("./data/map.tmx")
 
@@ -95,6 +98,7 @@ class Level:
                     interaction = self.interaction_sprites,
                     soil_layer = self.soil_layer,
                     toggle_shop = self.toggle_shop,
+                    toggle_pause = self.toggle_pause,
                     screen = self.display_surface) 
             
             if obj.name == "Bed":
@@ -119,6 +123,9 @@ class Level:
     def toggle_shop(self):
 
         self.shop_active = not self.shop_active
+
+    def toggle_pause(self): # menu do pause
+        self.game_paused = not self.game_paused
 
     def reset(self): # level -> transition -> reset -> level
         # plantas
@@ -173,6 +180,8 @@ class Level:
         # transition overlay
         if self.player.sleep:
             self.transition.play()
+
+        print(self.game_paused)
             
 class CameraGroup(pygame.sprite.Group): # câmera segue o player para onde ele anda
     def __init__(self):
