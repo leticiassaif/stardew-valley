@@ -87,14 +87,15 @@ class Level:
         # Player
         for obj in tmx_data.get_layer_by_name("Player"):
             if obj.name == "Start":
-                self.player = Player( #pos, group
+                self.player = Player(
                     pos =(obj.x,obj.y), 
                     group = self.all_sprites, 
                     collision_sprites = self.collision_sprites,
                     tree_sprites = self.tree_sprites,
                     interaction = self.interaction_sprites,
                     soil_layer = self.soil_layer,
-                    toggle_shop = self.toggle_shop) 
+                    toggle_shop = self.toggle_shop,
+                    screen = self.display_surface) 
             
             if obj.name == "Bed":
                 Interaction((obj.x,obj.y), (obj.width,obj.height), self.interaction_sprites, obj.name) #Area de interação

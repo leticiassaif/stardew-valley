@@ -4,7 +4,7 @@ from support import *
 from timer import Timer # type: ignore
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, pos, group, collision_sprites, tree_sprites, interaction, soil_layer, toggle_shop):
+    def __init__(self, pos, group, collision_sprites, tree_sprites, interaction, soil_layer, toggle_shop, screen):
         super().__init__(group)
     
         self.import_assets()
@@ -16,6 +16,13 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center = pos)
         self.hitbox = self.rect.copy().inflate((-126,-70))
         self.z = layers["main"]
+
+        self.screen = screen
+        self.current_energy = 200
+        self.maximum_energy = 270
+        self.energy_bar_length = 540
+        self.energy_ratio = self.maximum_energy / self.energy_bar_length
+        # self.current_xp =
 
         # movement attributes
         self.direction = pygame.math.Vector2()
@@ -136,6 +143,7 @@ class Player(pygame.sprite.Sprite):
                 self.timers["tool use"].activate()
                 self.direction = pygame.math.Vector2()
                 self.frame_index = 0
+                self.get_drained(50)
             
             # inv tool
             if keys[pygame.K_q] and not self.timers["tool switch"].active:
@@ -149,6 +157,7 @@ class Player(pygame.sprite.Sprite):
                 self.timers["seed use"].activate()
                 self.direction = pygame.math.Vector2()
                 self.frame_index = 0
+                self.get_drained(20)
 
             # inv seed
             if keys[pygame.K_e] and not self.timers["seed switch"].active:
@@ -176,6 +185,24 @@ class Player(pygame.sprite.Sprite):
         # tool use
         if self.timers["tool use"].active:
             self.status = self.status.split("_")[0]+"_"+self.selected_tool
+
+    def get_drained(self,amount): # diminui a energia
+        if self.current_energy > 0:
+            self.current_energy -= amount
+        if self.current_energy <= 0:
+            self.current_energy = 0
+            self.status = "down_idle"
+            self.sleep = True
+
+    # def get_energy(self,amount): # aumenta a energia
+    #     if self.current_energy < self.maximum_energy:
+    #         self.current_energy += amount
+    #     if self.current_energy >= self.maximum_energy:
+    #         self.current_energy = self.maximum_energy
+
+    def basic_energy(self):
+        pygame.draw.rect(self.screen, (219,86,125), (10, 10, self.current_energy / self.energy_ratio, 25))
+        pygame.draw.rect(self.screen, (255,255,255), (10, 10, self.energy_bar_length, 25), 4)
 
     def update_timers(self):
         for timer in self.timers.values():
@@ -222,6 +249,7 @@ class Player(pygame.sprite.Sprite):
     def update(self, dt):
         self.input()
         self.get_status()
+        self.basic_energy()
         self.update_timers()
         self.get_target_pos()
         self.move(dt)
