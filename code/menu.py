@@ -139,8 +139,8 @@ class Pause(Menu):
             self.pause_surfs.append(pause_surf)
             self.total_height += pause_surf.get_height() + (self.padding*2)
 
-        self.total_height += (len(self.pause_surfs) - 1) * self.space #se tiver 3 elementos, vai ter 2 espaços
-        self.menu_top = SCREEN_HEIGHT / 2 - self.total_height /  2 #sempre no meio
+        self.total_height += (len(self.pause_surfs) - 1) * self.space
+        self.menu_top = SCREEN_HEIGHT / 2 - self.total_height /  2
         self.main_rect = pygame.Rect(SCREEN_WIDTH/2 - self.width/2,self.menu_top,self.width,self.total_height)
 
         self.controls = False
@@ -192,7 +192,7 @@ class Pause(Menu):
             
             # texto dos controles
             controls = [
-                "controls:",
+                "controls",
                 "movement: arrows or wasd",
                 "use tool: space",
                 "switch tools: q",
