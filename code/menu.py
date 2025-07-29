@@ -5,35 +5,35 @@ from timer import Timer # type: ignore
 class Menu:
     def __init__(self, player, toggle_menu):
         
-        #general setup
+        # general setup
         self.player = player
         self.toggle_menu = toggle_menu
         self.display_surface = pygame.display.get_surface()
         self.font = pygame.font.Font("./font/LycheeSoda.ttf", 30)
         
-        #options
+        # options
         self.width = 400
         self.space = 10
         self.padding = 8
 
-        #entries
+        # entries
         self.options =  list(self.player.item_inventory.keys()) + list(self.player.seed_inventory.keys())
         self.sell_border =  len(self.player.item_inventory) - 1 #se > buying ou < selling
         self.setup()
 
-        #movement
-        self.index = 0 #movimentação da loja
-        self.timer = Timer(200) #200ms para mudar de item para não ficar rápido demais
+        # movement
+        self.index = 0 # movimentação da loja
+        self.timer = Timer(200) # 200ms para mudar de item para não ficar rápido demais
         
     def display_money(self):
         text_surf = self.font.render(f"R${self.player.money}", False, "Black")
         text_rect = text_surf.get_rect(midbottom = (SCREEN_WIDTH / 2,SCREEN_HEIGHT - 20))
 
-        pygame.draw.rect(self.display_surface, "White",text_rect.inflate(10,10),0,4) #4 deixa o rect redondo
+        pygame.draw.rect(self.display_surface, "White",text_rect.inflate(10,10),0,4) # 4 deixa o rect redondo
         self.display_surface.blit(text_surf,text_rect)
 
     def setup(self):
-        #create the text surf
+        # create the text surf
         self.text_surfs = []
         self.total_height = 0
 

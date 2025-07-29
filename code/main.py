@@ -3,7 +3,7 @@ from settings import *
 from level import Level
 
 class Game:
-    def __init__(self):
+    def __init__(self): # inicialização do jogo
         pygame.init()
         self.screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
         pygame.display.set_caption("Titico's Garden")
@@ -12,7 +12,7 @@ class Game:
         self.clock = pygame.time.Clock()
         self.level = Level()
 
-    def run(self):
+    def run(self): # loop do jogo
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

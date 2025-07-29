@@ -15,11 +15,11 @@ from menu import Menu
 
 class Level:
     def __init__(self):
-        # get the display surface
+        # pegar the display surface
         self.display_surface = pygame.display.get_surface()
 
-        # sprite groups
-        self.all_sprites = CameraGroup() # draw & update all sprites in game
+        # sprite groups / grupos
+        self.all_sprites = CameraGroup() # desenha (?) / draw e atualiza as sprites no game
         self.collision_sprites = pygame.sprite.Group()
         self.tree_sprites = pygame.sprite.Group()
         self.interaction_sprites = pygame.sprite.Group()
@@ -29,17 +29,17 @@ class Level:
         self.overlay = Overlay(self.player)
         self.transition = Transition(self.reset, self.player)
 
-        #sky
+        # céu
         self.rain = Rain(self.all_sprites)
-        self.raining = randint(0,10) > 7 #ON/OFF da chuva, ta randomizando o  True  False
+        self.raining = randint(0,10) > 7 # ON/OFF da chuva, ta randomizando o  True  False
         self.soil_layer.raining = self.raining
         self.sky = Sky()
 
-        #shop
+        # shop
         self.menu = Menu(self.player, self.toggle_shop)
         self.shop_active = False #ON/OFF menu do shop
 
-        #music
+        # música
         self.music = pygame.mixer.Sound("./audio/music.mp3")
         self.music.play(loops = -1)
         self.music.set_volume(0.05)
@@ -49,7 +49,7 @@ class Level:
     def setup(self): # pegar o mapa do tiled
         tmx_data = load_pygame("./data/map.tmx")
 
-        # house
+        # house / casa
         for layer in ["HouseFloor", "HouseFurnitureBottom"]:
             for x,y,surf in tmx_data.get_layer_by_name(layer).tiles():
                 Generic((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites, layers["house bottom"])
@@ -58,16 +58,16 @@ class Level:
             for x,y,surf in tmx_data.get_layer_by_name(layer).tiles():
                 Generic((x * TILE_SIZE, y * TILE_SIZE), surf, self.all_sprites) # layer -> main (default) if not specified
 
-        # fence
+        # fence / cerca
         for x,y,surf in tmx_data.get_layer_by_name("Fence").tiles():
             Generic((x * TILE_SIZE, y * TILE_SIZE), surf, [self.all_sprites, self.collision_sprites])
 
-        # water
+        # water / água
         water_frames = import_folder("./graphics/water")
         for x,y,surf in tmx_data.get_layer_by_name("Water").tiles():
             Water((x * TILE_SIZE, y * TILE_SIZE), water_frames, self.all_sprites)
 
-        # tree
+        # tree / árvore
         for obj in tmx_data.get_layer_by_name("Trees"):
             Tree(
                 pos = (obj.x, obj.y), 
@@ -76,11 +76,11 @@ class Level:
                 name = obj.name,
                 player_add = self.player_add)
 
-        # wildflowers
+        # wildflowers / decoração das plantas
         for obj in tmx_data.get_layer_by_name("Decoration"):
             WildFlower((obj.x, obj.y), obj.image, [self.all_sprites, self.collision_sprites])
 
-        #collision tiles
+        # collision tiles / tiles de colisão
         for x, y, surf in tmx_data.get_layer_by_name('Collision').tiles():
             Generic((x*TILE_SIZE,y*TILE_SIZE), pygame.Surface((TILE_SIZE, TILE_SIZE)), self.collision_sprites) #se fizer [self.all_sprites, self.collision_sprites] ele vai mostrar no jogo a "hitbox" da colisão
 
@@ -98,7 +98,7 @@ class Level:
                     screen = self.display_surface) 
             
             if obj.name == "Bed":
-                Interaction((obj.x,obj.y), (obj.width,obj.height), self.interaction_sprites, obj.name) #Area de interação
+                Interaction((obj.x,obj.y), (obj.width,obj.height), self.interaction_sprites, obj.name) # Area de interação
             
             if obj.name == "Trader":
                 Interaction((obj.x,obj.y), (obj.width,obj.height), self.interaction_sprites, obj.name)
@@ -109,7 +109,7 @@ class Level:
             groups = self.all_sprites,
             z = layers["ground"])
 
-    def player_add(self, item):
+    def player_add(self, item): # aumentar a quantidade no inventário
         if item == "wood":
             self.player.item_inventory[item] += randint(1,3) # quantidade varia
         else: 
@@ -121,23 +121,23 @@ class Level:
         self.shop_active = not self.shop_active
 
     def reset(self): # level -> transition -> reset -> level
-        # plants
+        # plantas
         self.soil_layer.update_plants()
 
-        # soil
+        # soil / solo
         self.soil_layer.remove_water()
         self.raining = randint(0,10) > 7
         self.soil_layer.raining = self.raining
         if self.raining:
             self.soil_layer.water_all()
 
-        # apples on the trees
+        # maçã na árvore
         for tree in self.tree_sprites.sprites():
             for apple in tree.apple_sprites.sprites():
                 apple.kill()
             tree.create_fruit()
 
-        #sky
+        # ceú
         self.sky.start_color = [255,255,255]
 
     def plant_collision(self): # quando a planta tiver pronta, um collide é a colheita
@@ -151,30 +151,30 @@ class Level:
 
     def run(self, dt):
         
-        #Drawing logic
+        # Drawing lógica
         self.display_surface.fill("black")
         self.all_sprites.custom_draw(self.player)
         
-        #updates
+        # updates / atualizações
         if self.shop_active:
             self.menu.update()
         else:
             self.all_sprites.update(dt)
             self.plant_collision()
     
-        ##Clima
+        # Clima
         self.overlay.display()
-        #rain
+        # chuva
         if self.raining and not self.shop_active:
             self.rain.update()
-        #daytime:
+        # daytime
         self.sky.display(dt)
 
-        #transition overlay
+        # transition overlay
         if self.player.sleep:
             self.transition.play()
             
-class CameraGroup(pygame.sprite.Group):
+class CameraGroup(pygame.sprite.Group): # câmera segue o player para onde ele anda
     def __init__(self):
         super().__init__()
         self.display_surface = pygame.display.get_surface()
