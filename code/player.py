@@ -176,6 +176,7 @@ class Player(pygame.sprite.Sprite):
                     else:
                         self.status = "left_idle"
                         self.sleep = True
+                        self.current_energy = self.maximum_energy
             
     def get_status(self):
         # idle status
@@ -190,9 +191,9 @@ class Player(pygame.sprite.Sprite):
         if self.current_energy > 0:
             self.current_energy -= amount
         if self.current_energy <= 0:
-            self.current_energy = 0
             self.status = "down_idle"
             self.sleep = True
+            self.current_energy = self.maximum_energy
 
     # def get_energy(self,amount): # aumenta a energia
     #     if self.current_energy < self.maximum_energy:
