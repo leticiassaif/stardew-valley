@@ -139,7 +139,6 @@ class SoilLayer:
                     WaterTile((x,y), choice(self.water_surf), [self.all_sprites, self.water_sprites])
 
     def remove_water(self):
-
         #destroy wall water sprites
         for sprite in self.water_sprites.sprites():
             sprite.kill()

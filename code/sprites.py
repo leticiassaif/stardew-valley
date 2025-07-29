@@ -49,7 +49,7 @@ class Particle(Generic):
         self.start_time = pygame.time.get_ticks() # taken once
         self.duration = duration
 
-        # white surface
+        # fica branco
         mask_surf = pygame.mask.from_surface(self.image)
         new_surf = mask_surf.to_surface()
         new_surf.set_colorkey((0,0,0))

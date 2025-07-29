@@ -46,7 +46,7 @@ class Level:
         self.success = pygame.mixer.Sound("./audio/success.wav")
         self.success.set_volume(0.1)
 
-    def setup(self):
+    def setup(self): # pegar o mapa do tiled
         tmx_data = load_pygame("./data/map.tmx")
 
         # house
@@ -87,14 +87,15 @@ class Level:
         # Player
         for obj in tmx_data.get_layer_by_name("Player"):
             if obj.name == "Start":
-                self.player = Player( #pos, group
+                self.player = Player(
                     pos =(obj.x,obj.y), 
                     group = self.all_sprites, 
                     collision_sprites = self.collision_sprites,
                     tree_sprites = self.tree_sprites,
                     interaction = self.interaction_sprites,
                     soil_layer = self.soil_layer,
-                    toggle_shop = self.toggle_shop) 
+                    toggle_shop = self.toggle_shop,
+                    screen = self.display_surface) 
             
             if obj.name == "Bed":
                 Interaction((obj.x,obj.y), (obj.width,obj.height), self.interaction_sprites, obj.name) #Area de interação
@@ -110,7 +111,7 @@ class Level:
 
     def player_add(self, item):
         if item == "wood":
-            self.player.item_inventory[item] += randint(1,3)
+            self.player.item_inventory[item] += randint(1,3) # quantidade varia
         else: 
             self.player.item_inventory[item] += 1
         self.success.play()
@@ -139,7 +140,7 @@ class Level:
         #sky
         self.sky.start_color = [255,255,255]
 
-    def plant_collision(self):
+    def plant_collision(self): # quando a planta tiver pronta, um collide é a colheita
         if self.soil_layer.plant_sprites:
             for plant in self.soil_layer.plant_sprites.sprites():
                 if plant.harvestable and plant.rect.colliderect(self.player.hitbox):
