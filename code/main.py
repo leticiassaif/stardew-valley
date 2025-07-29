@@ -11,7 +11,6 @@ class Game:
         pygame.display.set_icon(icon)
         self.clock = pygame.time.Clock()
         # self.game_start = False
-        # self.game_pause = False
         self.level = Level()
 
     def run(self): # loop do jogo
