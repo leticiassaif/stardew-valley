@@ -9,7 +9,7 @@ from transition import Transition
 from soil import SoilLayer
 from sky import Rain, Sky
 from random import randint
-from menu import Menu
+from menu import Menu, Pause
 
 
 
@@ -48,6 +48,7 @@ class Level:
 
         # pause menu
         self.game_paused = False # on & off do pause
+        self.pause_menu = Pause(self.player, self.toggle_pause)
 
     def setup(self): # pegar o mapa do tiled
         tmx_data = load_pygame("./data/map.tmx")
@@ -165,6 +166,8 @@ class Level:
         # updates / atualizações
         if self.shop_active:
             self.menu.update()
+        elif self.game_paused:
+            self.pause_menu.update()
         else:
             self.all_sprites.update(dt)
             self.plant_collision()
@@ -172,7 +175,7 @@ class Level:
         # Clima
         self.overlay.display()
         # chuva
-        if self.raining and not self.shop_active:
+        if self.raining and not self.shop_active and not self.game_paused:
             self.rain.update()
         # daytime
         self.sky.display(dt)
@@ -180,8 +183,6 @@ class Level:
         # transition overlay
         if self.player.sleep:
             self.transition.play()
-
-        print(self.game_paused)
             
 class CameraGroup(pygame.sprite.Group): # câmera segue o player para onde ele anda
     def __init__(self):
