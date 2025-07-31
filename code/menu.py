@@ -193,15 +193,15 @@ class Pause(Menu):
             # texto dos controles
             controls = [
                 "controls",
-                "movement: arrows or wasd",
-                "use tool: space",
-                "switch tools: q",
-                "use seed: left ctrl",
-                "switch seeds: e",
-                "pause: p",
-                "sleep: return",
-                "shop: return or right ctrl",
-                "leave menu: esc"
+                "Movement: Arrows or W A S D",
+                "Use Tool: SPACE",
+                "Switch Tools: Q",
+                "Use Seed: Left CTRL",
+                "Switch Seeds: E",
+                "Pause: P",
+                "Sleep: Return",
+                "Shop: Return or Right CTRL",
+                "Leave Menu: ESC"
             ]
 
             # ajustar o tamanho do coisa
