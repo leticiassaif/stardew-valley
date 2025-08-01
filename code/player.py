@@ -41,7 +41,7 @@ class Player(pygame.sprite.Sprite):
             "tool switch": Timer(200),
             "seed use": Timer(350, self.use_seed),
             "seed switch": Timer(200),
-            "pass_out": Timer(800)
+            "pass out": Timer(800)
         }
 
         # tools
@@ -123,7 +123,7 @@ class Player(pygame.sprite.Sprite):
     def input(self):
         keys = pygame.key.get_pressed()
 
-        if not self.timers["tool use"].active and not self.sleep and not self.timers["pass_out"].active:
+        if not self.timers["tool use"].active and not self.sleep and not self.timers["pass out"].active:
             # direção
             if keys[pygame.K_UP] or keys[pygame.K_w] :
                 self.direction.y = -1
@@ -195,11 +195,14 @@ class Player(pygame.sprite.Sprite):
         if self.timers["tool use"].active:
             self.status = self.status.split("_")[0]+"_"+self.selected_tool
 
+        if self.timers["pass out"].active:
+            self.status = "down_fatigue"
+
     def get_drained(self,amount): # diminui a energia
         if self.current_energy > 0:
             self.current_energy -= amount
         if self.current_energy <= 0:
-            self.status = "down_fatigue"
+            # self.status = "down_fatigue"
             self.sleep = True
             self.current_energy = int(self.maximum_energy*0.75)
 
