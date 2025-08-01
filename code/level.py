@@ -10,6 +10,7 @@ from soil import SoilLayer
 from sky import Rain, Sky
 from random import randint
 from menu import Menu, Pause
+from fatigue import Fatigue
 
 
 
@@ -49,6 +50,9 @@ class Level:
         # pause menu
         self.game_paused = False # on & off do pause
         self.pause_menu = Pause(self.player, self.toggle_pause)
+
+        #fatiga
+        self.fatigue = Fatigue(self.player)
 
     def setup(self): # pegar o mapa do tiled
         tmx_data = load_pygame("./data/map.tmx")
@@ -148,6 +152,9 @@ class Level:
         # ceú
         self.sky.start_color = [255,255,255]
 
+        #fatiga
+        self.fatigue.reset()
+
     def plant_collision(self): # quando a planta tiver pronta, um collide é a colheita
         if self.soil_layer.plant_sprites:
             for plant in self.soil_layer.plant_sprites.sprites():
@@ -179,6 +186,9 @@ class Level:
             self.rain.update()
         # daytime
         self.sky.display(dt)
+
+        #fatiga
+        self.fatigue.update(self.sky, self.raining)
 
         # transition overlay
         if self.player.sleep:

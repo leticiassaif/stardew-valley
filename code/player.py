@@ -40,7 +40,8 @@ class Player(pygame.sprite.Sprite):
             "tool use": Timer(350, self.use_tool),
             "tool switch": Timer(200),
             "seed use": Timer(350, self.use_seed),
-            "seed switch": Timer(200)
+            "seed switch": Timer(200),
+            "pass_out": Timer(800)
         }
 
         # tools
@@ -106,7 +107,7 @@ class Player(pygame.sprite.Sprite):
 						   "right_idle": [],"left_idle": [],"up_idle": [],"down_idle": [],
 						   "right_hoe": [],"left_hoe": [],"up_hoe": [],"down_hoe": [],
 						   "right_axe": [],"left_axe": [],"up_axe":[],"down_axe": [],
-						   "right_water": [],"left_water": [],"up_water": [],"down_water": []}
+						   "right_water": [],"left_water": [],"up_water": [],"down_water": [], "down_fatigue": []}
                            
         for animation in self.animations.keys():
             full_path = "./graphics/character/"+animation
@@ -122,7 +123,7 @@ class Player(pygame.sprite.Sprite):
     def input(self):
         keys = pygame.key.get_pressed()
 
-        if not self.timers["tool use"].active and not self.sleep:
+        if not self.timers["tool use"].active and not self.sleep and not self.timers["pass_out"].active:
             # direção
             if keys[pygame.K_UP] or keys[pygame.K_w] :
                 self.direction.y = -1
@@ -198,9 +199,9 @@ class Player(pygame.sprite.Sprite):
         if self.current_energy > 0:
             self.current_energy -= amount
         if self.current_energy <= 0:
-            self.status = "down_idle"
+            self.status = "down_fatigue"
             self.sleep = True
-            self.current_energy = self.maximum_energy
+            self.current_energy = int(self.maximum_energy*0.75)
 
     # def get_energy(self,amount): # aumenta a energia
     #     if self.current_energy < self.maximum_energy:
