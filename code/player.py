@@ -222,7 +222,7 @@ class Player(pygame.sprite.Sprite):
 
     def basic_energy(self): # barra de energia
         pygame.draw.rect(self.screen, (255,255,255), (10, 10, self.energy_bar_length, 25))
-        pygame.draw.rect(self.screen, (219,86,125), (10, 10, self.current_energy / self.energy_ratio, 25))
+        pygame.draw.rect(self.screen, (177,216,242), (10, 10, self.current_energy / self.energy_ratio, 25))
         pygame.draw.rect(self.screen, (255,255,255), (10, 10, self.energy_bar_length, 25), 4)
 
     def basic_xp(self): # barra de xp
