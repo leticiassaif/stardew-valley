@@ -24,7 +24,12 @@ class Player(pygame.sprite.Sprite):
         self.energy_bar_length = 400
         self.energy_ratio = self.maximum_energy / self.energy_bar_length
 
-        # self.current_xp =
+        # barra de xp
+        self.current_xp = 0
+        self.maximum_xp = 300
+        self.xp_bar_length = 350
+        self.xp_ratio = self.maximum_xp / self.xp_bar_length
+        self.xp_level = 1
 
         # atributos de movimentação
         self.direction = pygame.math.Vector2()
@@ -149,6 +154,7 @@ class Player(pygame.sprite.Sprite):
                 self.direction = pygame.math.Vector2()
                 self.frame_index = 0
                 self.get_drained(4)
+                self.get_xp(7)
             
             # inventário tool
             if keys[pygame.K_q] and not self.timers["tool switch"].active:
@@ -162,6 +168,7 @@ class Player(pygame.sprite.Sprite):
                 self.timers["seed use"].activate()
                 self.direction = pygame.math.Vector2()
                 self.frame_index = 0
+                # self.get_xp(1)
 
             # inventário semente
             if keys[pygame.K_e] and not self.timers["seed switch"].active:
@@ -206,16 +213,27 @@ class Player(pygame.sprite.Sprite):
             self.sleep = True
             self.current_energy = int(self.maximum_energy*0.75)
 
-    # def get_energy(self,amount): # aumenta a energia
-    #     if self.current_energy < self.maximum_energy:
-    #         self.current_energy += amount
-    #     if self.current_energy >= self.maximum_energy:
-    #         self.current_energy = self.maximum_energy
+    def get_xp(self,amount): # aumenta o xp
+        if self.current_xp < self.maximum_xp:
+            self.current_xp += amount
+        if self.current_xp >= self.maximum_xp:
+            self.xp_level += 1
+            self.current_xp = 0
 
     def basic_energy(self): # barra de energia
         pygame.draw.rect(self.screen, (255,255,255), (10, 10, self.energy_bar_length, 25))
         pygame.draw.rect(self.screen, (219,86,125), (10, 10, self.current_energy / self.energy_ratio, 25))
         pygame.draw.rect(self.screen, (255,255,255), (10, 10, self.energy_bar_length, 25), 4)
+
+    def basic_xp(self): # barra de xp
+        pygame.draw.rect(self.screen, (255,255,255), (10, 40, self.xp_bar_length, 25))
+        pygame.draw.rect(self.screen, (156,235,148), (10, 40, self.current_xp / self.xp_ratio, 25))
+        pygame.draw.rect(self.screen, (255,255,255), (10, 40, self.xp_bar_length, 25), 4)
+
+        font = pygame.font.Font("./font/LycheeSoda.ttf", 30)
+        level_text = font.render(f"Level {self.xp_level}", False, "white")
+        level_rect = level_text.get_rect(midleft = (372, 52))
+        self.screen.blit(level_text, level_rect)
 
     def update_timers(self):
         for timer in self.timers.values():
@@ -263,6 +281,7 @@ class Player(pygame.sprite.Sprite):
         self.input()
         self.get_status()
         self.basic_energy()
+        self.basic_xp()
         self.update_timers()
         self.get_target_pos()
         self.move(dt)
