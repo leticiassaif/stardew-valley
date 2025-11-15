@@ -210,9 +210,6 @@ class CameraGroup(pygame.sprite.Group): # câmera segue o player para onde ele a
                         offset_rect = sprite.rect.copy()
                         offset_rect.center -= self.offset
                         self.display_surface.blit(sprite.image, offset_rect)
-                         # DEBUG TEMPORÁRIO: Desenhar retângulo vermelho ao redor das maçãs
-                        if sprite.z == layers["fruit"]:
-                            pygame.draw.rect(self.display_surface, 'red', offset_rect, 2)
 
                     # #MOSTRAR HITBOX
                     # if sprite == player:
