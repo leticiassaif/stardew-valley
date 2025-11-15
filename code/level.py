@@ -204,12 +204,15 @@ class CameraGroup(pygame.sprite.Group): # câmera segue o player para onde ele a
         self.offset.x = player.rect.centerx - SCREEN_WIDTH / 2
         self.offset.y = player.rect.centery - SCREEN_HEIGHT / 2
 
-        for layer_pos in layers.values():
-            for sprite in sorted(self.sprites(), key = lambda sprite: sprite.rect.centery):
-                if sprite.z == layer_pos:
-                    offset_rect = sprite.rect.copy()
-                    offset_rect.center -= self.offset
-                    self.display_surface.blit(sprite.image, offset_rect)
+        for layer_pos in sorted(layers.values()):  # Ordena as camadas numericamente
+            sprites_in_layer = [sprite for sprite in self.sprites() if sprite.z == layer_pos]
+            for sprite in sorted(sprites_in_layer, key=lambda sprite: sprite.rect.centery):
+                        offset_rect = sprite.rect.copy()
+                        offset_rect.center -= self.offset
+                        self.display_surface.blit(sprite.image, offset_rect)
+                         # DEBUG TEMPORÁRIO: Desenhar retângulo vermelho ao redor das maçãs
+                        if sprite.z == layers["fruit"]:
+                            pygame.draw.rect(self.display_surface, 'red', offset_rect, 2)
 
                     # #MOSTRAR HITBOX
                     # if sprite == player:

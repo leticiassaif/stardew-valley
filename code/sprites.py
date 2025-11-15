@@ -71,7 +71,7 @@ class Tree(Generic):
         self.stump_surf = pygame.image.load(stump_path).convert_alpha()
 
         # apples
-        self.apples_surf =  pygame.image.load("./graphics/fruit/apple.png")
+        self.apples_surf = pygame.image.load("./graphics/fruit/apple.png").convert_alpha()
         self.apple_pos = apple_pos[name]
         self.apple_sprites = pygame.sprite.Group()
         self.create_fruit()
@@ -112,13 +112,31 @@ class Tree(Generic):
             self.check_death()
 
     def create_fruit(self):
+        # Limitar no máximo 3 maçãs por árvore
+        max_apples = 3
+        apple_count = 0
+        
         for pos in self.apple_pos:
-            if randint(0,10) < 2:
+            # Para se já criou 3 maçãs
+            if apple_count >= max_apples:
+                break
+                
+
+            if randint(0, 10) < 2:
                 x = pos[0] + self.rect.left
                 y = pos[1] + self.rect.top
-                Generic(
-                    pos = (x,y), 
-                    surf = self.apples_surf,
-                    groups = [self.apple_sprites,self.groups()[0]],#Tá chamando [self.all_sprites, self.collision_sprites]
-                    z = layers["fruit"])
-    
+                
+                # Encontrar o all_sprites
+                all_sprites_group = None
+                for group in self.groups():
+                    if hasattr(group, 'custom_draw'):
+                        all_sprites_group = group
+                        break
+                
+                if all_sprites_group:
+                    Generic(
+                        pos = (x,y), 
+                        surf = self.apples_surf,
+                        groups = [self.apple_sprites, all_sprites_group],
+                        z = layers["fruit"])
+                    apple_count += 1
